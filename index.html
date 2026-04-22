@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Strat-OS · Colombia Intelligence Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --bg2: #0a0a0a;
+            --bg3: #0f0f0f;
+            --red: #E50914;
+            --red2: #ff1e2d;
+            --red-dim: rgba(229, 9, 20, 0.15);
+            --red-glow: rgba(229, 9, 20, 0.4);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --glass-border-red: rgba(229, 9, 20, 0.3);
+            --text: #f0f0f0;
+            --text-dim: #888;
+            --text-dimmer: #444;
+            --green: #00d47a;
+            --orange: #ff8c00;
+            --blue: #00b4d8;
+            --purple: #b388ff;
+            --gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -20%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(ellipse, rgba(229, 9, 20, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(ellipse, rgba(229, 9, 20, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── HEADER ─── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-n {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 22px;
+            color: var(--red);
+            letter-spacing: -1px;
+            text-shadow: 0 0 20px var(--red-glow);
+        }
+
+        .logo-sep {
+            width: 1px;
+            height: 28px;
+            background: var(--glass-border);
+        }
+
+        .logo-sub {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--green);
+            text-transform: uppercase;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 212, 122, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(0, 212, 122, 0);
+            }
+        }
+
+        .header-time {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+        }
+
+        .colombia-flag {
+            font-size: 18px;
+        }
+
+        /* ─── TABS ─── */
+        .tabs-container {
+            position: sticky;
+            top: 64px;
+            z-index: 99;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 32px;
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            color: var(--red);
+            border-bottom-color: var(--red);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--red-glow), transparent);
+        }
+
+        .tab-btn i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            padding: 28px 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ─── GLASS CARD ─── */
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .card.red-accent {
+            border-color: var(--glass-border-red);
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.05) 0%, var(--glass) 100%);
+        }
+
+        .card.red-accent::before {
+            background: linear-gradient(90deg, transparent, var(--red-glow), transparent);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* ─── KPI CARDS ─── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--glass-border-red);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(229, 9, 20, 0.1);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .kpi-card:hover::after {
+            opacity: 1;
+        }
+
+        .kpi-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .kpi-label i {
+            width: 12px;
+            height: 12px;
+            color: var(--red);
+        }
+
+        .kpi-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .kpi-unit {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-left: 4px;
+        }
+
+        .kpi-trend {
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kpi-trend.up {
+            color: var(--green);
+        }
+
+        .kpi-trend.down {
+            color: var(--red);
+        }
+
+        .kpi-trend i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* ─── GRIDS ─── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-65 {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-75 {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 16px;
+        }
+
+        .mb16 {
+            margin-bottom: 16px;
+        }
+
+        .mb24 {
+            margin-bottom: 24px;
+        }
+
+        /* Chart containers */
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrap {
+            overflow-x: auto;
+            max-height: 560px;
+            overflow-y: auto;
+        }
+
+        .table-wrap::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .table-wrap::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .table-wrap::-webkit-scrollbar-thumb {
+            background: var(--glass-border-red);
+            border-radius: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: #0d0d0d;
+            padding: 10px 14px;
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            border-bottom: 1px solid var(--glass-border-red);
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(229, 9, 20, 0.04);
+        }
+
+        tbody td {
+            padding: 9px 14px;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .td-audience {
+            max-width: 220px;
+        }
+
+        .td-profile {
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .td-behavior {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .badge-green {
+            background: rgba(0, 212, 122, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(0, 212, 122, 0.3);
+        }
+
+        .badge-orange {
+            background: rgba(255, 140, 0, 0.15);
+            color: var(--orange);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+        }
+
+        .badge-red {
+            background: rgba(229, 9, 20, 0.15);
+            color: #ff5555;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .city-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+        }
+
+        .city-dot::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--red);
+            flex-shrink: 0;
+        }
+
+        /* ─── ALERTS ─── */
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 8px;
+        }
+
+        .alert-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .alert-dot.critical {
+            background: var(--red);
+            box-shadow: 0 0 8px var(--red-glow);
+        }
+
+        .alert-dot.warning {
+            background: var(--orange);
+            box-shadow: 0 0 8px rgba(255, 140, 0, 0.4);
+        }
+
+        .alert-dot.info {
+            background: var(--blue);
+            box-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+        }
+
+        .alert-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+
+        .alert-desc {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        /* Progress Bar */
+        .progress-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        .progress-bar-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        /* ─── FUNNEL ─── */
+        .funnel-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid;
+            position: relative;
+        }
+
+        .funnel-bar {
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+            min-width: 80px;
+            justify-content: flex-end;
+        }
+
+        .funnel-label {
+            font-size: 12px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .funnel-pct {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .funnel-drop {
+            font-size: 10px;
+            color: var(--red);
+            margin-left: auto;
+        }
+
+        /* ─── ROI METRICS ─── */
+        .roi-metric {
+            text-align: center;
+            padding: 24px 16px;
+            border-radius: 10px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+
+        .roi-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .roi-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* Channel table */
+        .channel-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 12px;
+        }
+
+        .channel-name {
+            width: 80px;
+            font-weight: 600;
+        }
+
+        .channel-bar-wrap {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .channel-bar {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .channel-risk {
+            width: 50px;
+            text-align: right;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* ─── SECTION TITLE ─── */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--red-dim), transparent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4,
+            .grid-65,
+            .grid-75 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            header,
+            .tabs-container {
+                padding: 0 16px;
+            }
+
+            main {
+                padding: 16px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Animate in */
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-panel.active .card,
+        .tab-panel.active .kpi-card {
+            animation: fade-up 0.4s ease both;
+        }
+
+        .tab-panel.active .kpi-card:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .tab-panel.active .kpi-card:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        .tab-panel.active .kpi-card:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        /* Search */
+        .search-input {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 220px;
+        }
+
+        .search-input:focus {
+            border-color: var(--glass-border-red);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-dimmer);
+        }
+
+        .count-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--text-dim);
+            padding: 4px 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <span class="logo-n">N</span>
+            <div class="logo-sep"></div>
+            <div>
+                <div class="logo-sub">Strat·OS</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="live-badge">
+                <div class="live-dot"></div>En Vivo
+            </div>
+            <div class="header-time" id="clock">00:00:00</div>
+            <span class="colombia-flag">🇨🇴</span>
+        </div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" data-tab="resumen"><i data-lucide="layout-dashboard"></i>Resumen</button>
+        <button class="tab-btn" data-tab="audiencias"><i data-lucide="users"></i>Audiencias</button>
+        <button class="tab-btn" data-tab="graficas"><i data-lucide="bar-chart-2"></i>Gráficas</button>
+        <button class="tab-btn" data-tab="publicidad"><i data-lucide="megaphone"></i>Publicidad</button>
+        <button class="tab-btn" data-tab="estrategia"><i data-lucide="target"></i>Estrategia</button>
+    </div>
+
+    <main>
+
+        <!-- ════════════ TAB: RESUMEN ════════════ -->
+        <div class="tab-panel active" id="tab-resumen">
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="clock"></i>Tiempo de Consumo</div>
+                    <div class="kpi-value"><span id="kpi-tiempo">—</span><span class="kpi-unit">min</span></div>
+                    <div class="kpi-trend up" id="kpi-tiempo-trend"><i data-lucide="trending-up"></i>+8.3% vs mes anterior</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="zap"></i>Engagement Index</div>
+                    <div class="kpi-value"><span id="kpi-engagement">—</span></div>
+                    <div class="kpi-trend up" id="kpi-eng-trend"><i data-lucide="trending-up"></i>+5.1% vs mes anterior</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="users"></i>Audiencias</div>
+                    <div class="kpi-value">150</div>
+                    <div class="kpi-trend up"><i data-lucide="trending-up"></i>+12 nuevos segmentos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="star"></i>UX Score</div>
+                    <div class="kpi-value"><span id="kpi-ux">—</span><span class="kpi-unit">/10</span></div>
+                    <div class="kpi-trend" id="kpi-ux-trend"><i data-lucide="trending-up"></i></div>
+                </div>
+            </div>
+
+            <div class="grid-65 mb24">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Radar de Comportamiento</span>
+                        <span style="font-size:10px;color:var(--text-dim)">Promedio 150 segmentos</span>
+                    </div>
+                    <div class="chart-wrap" style="height:280px">
+                        <canvas id="chart-radar"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Engagement Quartiles</span>
+                    </div>
+                    <div class="chart-wrap" style="height:280px">
+                        <canvas id="chart-doughnut"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-65">
+                <div class="card" style="margin-top:16px;">
+                    <div class="card-header">
+                        <span class="card-title">Top 3 Géneros Más Consumidos</span>
+                    </div>
+
+                    <div id="top-genres"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Alertas Críticas</span>
+                        <span style="font-size:10px;color:var(--red)">3 activas</span>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-dot critical"></div>
+                        <div>
+                            <div class="alert-title">⚡ Cali Drop-off Detectado</div>
+                            <div class="alert-desc">Segmentos de Cali muestran una caída del 23% en retención entre minutos 40–60. Requiere acción inmediata en recomendación de contenido.</div>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-dot warning"></div>
+                        <div>
+                            <div class="alert-title">🎯 Gen Z Engagement Bajo</div>
+                            <div class="alert-desc">Audiencias 18–24 años presentan índice de 4.8 promedio. 34% por debajo del benchmark regional. Priorizar contenido nativo y micro-series.</div>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-dot info"></div>
+                        <div>
+                            <div class="alert-title">📈 Bogotá Spike Identificado</div>
+                            <div class="alert-desc">Pico de consumo +41% en segmento corporativo Bogotá (Tier 1). Oportunidad para activación de campaña premium en horario nocturno.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Content Mix Colombia</span>
+                    </div>
+                    <div style="margin-bottom:20px">
+                        <div class="progress-row">
+                            <span style="color:var(--red);font-weight:600;font-size:12px">🇨🇴 Contenido Local</span>
+                            <span style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--red)">42%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:42%;background:linear-gradient(90deg,var(--red),#ff4444)"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress-row">
+                            <span style="color:var(--blue);font-weight:600;font-size:12px">🌎 Contenido Global</span>
+                            <span style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--blue)">58%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:58%;background:linear-gradient(90deg,var(--blue),#48cae4)"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--glass-border)">
+                        <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Meta 2025: Elevar local a 50%</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:84%;background:linear-gradient(90deg,var(--gold),#ffaa00);"></div>
+                        </div>
+                        <div style="font-size:10px;color:var(--gold);margin-top:4px">84% del objetivo alcanzado</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ════════════ TAB: AUDIENCIAS ════════════ -->
+        <div class="tab-panel" id="tab-audiencias">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Tabla de Segmentos · Colombia</span>
+                    <div style="display:flex;align-items:center;gap:12px">
+                        <input class="search-input" type="text" placeholder="Buscar audiencia..." id="search-audience">
+                        <span class="count-badge" id="row-count">150 registros</span>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table id="audience-table">
+                        <thead>
+                            <tr>
+                                <th>Audiencia</th>
+                                <th>Ciudad</th>
+                                <th>Consumo (min)</th>
+                                <th>Frecuencia (x)</th>
+                                <th>Satisfacción</th>
+                                <th>Índice</th>
+                            </tr>
+                        </thead>
+                        <tbody id="audience-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════ TAB: GRÁFICAS ════════════ -->
+        <div class="tab-panel" id="tab-graficas">
+            <div class="grid-2 mb24">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Evolución Engagement · Ene–Jun</span></div>
+                    <div class="chart-wrap" style="height:260px"><canvas id="chart-line"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Top 15 Audiencias por Consumo</span></div>
+                    <div class="chart-wrap" style="height:260px"><canvas id="chart-bar"></canvas></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Dispersión: Tiempo vs Frecuencia (150 segmentos)</span>
+                    <span style="font-size:10px;color:var(--text-dim)">Tamaño de burbuja = Satisfacción</span>
+                </div>
+                <div class="chart-wrap" style="height:320px"><canvas id="chart-scatter"></canvas></div>
+            </div>
+        </div>
+
+        <!-- ════════════ TAB: PUBLICIDAD ════════════ -->
+        <div class="tab-panel" id="tab-publicidad">
+            <div class="grid-3 mb24">
+                <div class="roi-metric card red-accent">
+                    <div class="roi-value" style="color:var(--gold)">$1,250M</div>
+                    <div class="roi-label">Presupuesto Total COP</div>
+                </div>
+                <div class="roi-metric card">
+                    <div class="roi-value" style="color:var(--blue)">411.8M</div>
+                    <div class="roi-label">Alcance Impresiones</div>
+                </div>
+                <div class="roi-metric card red-accent">
+                    <div class="roi-value" style="color:var(--green)">82%</div>
+                    <div class="roi-label">ROI Promedio</div>
+                </div>
+            </div>
+
+            <div class="mb24">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Matriz Riesgo vs Eficiencia</span>
+                    </div>
+                    <div class="chart-wrap" style="height:300px">
+                        <canvas id="chart-bubble"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Desglose por Canal</span>
+                </div>
+                <div id="channel-table"></div>
+            </div>
+        </div>
+        </div>
+
+        <!-- ════════════ TAB: ESTRATEGIA ════════════ -->
+        <div class="tab-panel" id="tab-estrategia">
+            <div class="grid-2">
+
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Conversion Funnel Colombia</span></div>
+                    <div id="funnel-container"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Proyección de Churn Semanal</span>
+                        <span style="font-size:10px;color:var(--green)">↓ Reducción proyectada</span>
+                    </div>
+                    <div class="chart-wrap" style="height:320px"><canvas id="chart-churn"></canvas></div>
+                </div>
+            </div>
+            <div class="card" style="margin-top:16px;padding:16px;">
+                <div class="card-header" style="margin-bottom:10px;">
+                    <span class="card-title">Proyección de Ingresos</span>
+                </div>
+
+                <div style="display:grid;grid-template-columns: repeat(3,1fr);gap:12px;">
+
+                    <!-- Crecimiento -->
+                    <div>
+                        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px">
+                            Crecimiento
+                        </div>
+
+                        <div style="font-family:'Orbitron';font-size:20px;color:var(--green);font-weight:700">
+                            +18%
+                        </div>
+
+                        <div style="font-size:10px;color:var(--text-dim)">
+                            +18,000 usuarios
+                        </div>
+                    </div>
+
+                    <!-- ARPU -->
+                    <div>
+                        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px">
+                            ARPU
+                        </div>
+                        <div style="font-family:'Orbitron';font-size:20px;color:var(--gold);font-weight:700">
+                            $42K
+                        </div>
+                    </div>
+
+                    <!-- Recaudo total -->
+                    <div>
+                        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px">
+                            Recaudo Proyectado
+                        </div>
+                        <div style="font-family:'Orbitron';font-size:20px;color:var(--red);font-weight:700">
+                            $756M
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // ══════════════════════════════════
+        //  DATA GENERATION ENGINE
+        // ══════════════════════════════════
+        const PROFILES = [
+            'Familia Premium', 'Joven Profesional', 'Gamer Intensivo', 'Estudiante Universitario',
+            'Ejecutivo Corporativo', 'Adulto Mayor Activo', 'Mamá Millennial', 'Cinéfilo Hardcore',
+            'Teletrabajador', 'Gen Z Creator', 'Pareja Sin Hijos', 'Maratonista Nocturno',
+            'Series Binger', 'Documental Lover', 'Animé Fan', 'Deportes & Reality', 'Expat Urbano',
+            'Emprendedor Digital', 'Freelancer Creativo', 'Consumidor Casual'
+        ];
+        const BEHAVIORS = [
+            'Binge-watch fines de semana', 'Consumo diario > 2h', 'Multitasker activo',
+            'Solo contenido local', 'Preferencia dramas', 'Fan series internacionales',
+            'Alto engagement familiar', 'Re-watch frecuente', 'Early adopter', 'Uso móvil 80%',
+            'Smart TV exclusivo', 'Consumo en tránsito', 'Late night viewer', 'Weekend warrior',
+            'Alternador de plataformas', 'Suscriptor leal > 2 años'
+        ];
+        const CITIES = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Bucaramanga'];
+
+        function rnd(min, max, dec = 1) {
+            return parseFloat((Math.random() * (max - min) + min).toFixed(dec));
+        }
+
+        function pick(arr) {
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        // Generate 150 unique audience rows
+        const audienceData = Array.from({
+            length: 150
+        }, (_, i) => {
+            const consumo = rnd(20, 180, 0);
+            const freq = rnd(1, 9, 1);
+            const satisf = rnd(2.5, 10, 1);
+            const index = parseFloat(((satisf * 0.4 + (freq / 9) * 10 * 0.3 + (consumo / 180) * 10 * 0.3)).toFixed(1));
+            return {
+                id: i + 1,
+                profile: pick(PROFILES),
+                behavior: pick(BEHAVIORS),
+                city: pick(CITIES),
+                consumo,
+                freq,
+                satisf,
+                index
+            };
+        });
+
+        // ══════════════════════════════════
+        //  SYNC KPIs FROM DATA
+        // ══════════════════════════════════
+        function calcKPIs() {
+            const n = audienceData.length;
+            const avgConsumo = (audienceData.reduce((s, d) => s + d.consumo, 0) / n).toFixed(0);
+            const avgIndex = (audienceData.reduce((s, d) => s + d.index, 0) / n).toFixed(2);
+            const avgUX = (audienceData.reduce((s, d) => s + d.satisf, 0) / n).toFixed(1);
+
+            document.getElementById('kpi-tiempo').textContent = avgConsumo;
+            document.getElementById('kpi-engagement').textContent = avgIndex;
+            document.getElementById('kpi-ux').textContent = avgUX;
+
+            const uxTrend = document.getElementById('kpi-ux-trend');
+            if (parseFloat(avgUX) >= 6.5) {
+                uxTrend.className = 'kpi-trend up';
+                uxTrend.innerHTML = '<i data-lucide="trending-up"></i>+3.7% vs mes anterior';
+            } else {
+                uxTrend.className = 'kpi-trend down';
+                uxTrend.innerHTML = '<i data-lucide="trending-down"></i>-2.1% vs mes anterior';
+            }
+            lucide.createIcons();
+        }
+
+        // ══════════════════════════════════
+        //  AUDIENCE TABLE
+        // ══════════════════════════════════
+        function renderTable(data) {
+            const tbody = document.getElementById('audience-tbody');
+            tbody.innerHTML = data.map(d => {
+                const badgeClass = d.index >= 8 ? 'badge-green' : d.index >= 5.5 ? 'badge-orange' : 'badge-red';
+                return `<tr>
+      <td class="td-audience">
+        <div class="td-profile">${d.profile}</div>
+        <div class="td-behavior">${d.behavior}</div>
+      </td>
+      <td><span class="city-dot">${d.city}</span></td>
+      <td><span style="font-family:'Orbitron',sans-serif;font-size:12px">${d.consumo}</span></td>
+      <td>${d.freq}x/sem</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+            <div style="width:${d.satisf*10}%;height:100%;background:${d.satisf>=7?'var(--green)':d.satisf>=5?'var(--orange)':'var(--red)'}"></div>
+          </div>
+          <span style="font-size:11px;font-weight:600">${d.satisf}</span>
+        </div>
+      </td>
+      <td><span class="badge ${badgeClass}">${d.index}</span></td>
+    </tr>`;
+            }).join('');
+        }
+
+        renderTable(audienceData);
+
+        document.getElementById('search-audience').addEventListener('input', function() {
+            const q = this.value.toLowerCase();
+            const filtered = audienceData.filter(d =>
+                d.profile.toLowerCase().includes(q) ||
+                d.city.toLowerCase().includes(q) ||
+                d.behavior.toLowerCase().includes(q)
+            );
+            renderTable(filtered);
+            document.getElementById('row-count').textContent = `${filtered.length} registros`;
+        });
+
+        // ══════════════════════════════════
+        //  CHART.JS THEME
+        // ══════════════════════════════════
+        Chart.defaults.color = '#888';
+        Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        const RED = '#E50914';
+        const RED_T = 'rgba(229,9,20,0.15)';
+        const GREEN = '#00d47a';
+        const GREEN_T = 'rgba(0,212,122,0.15)';
+        const BLUE = '#00b4d8';
+        const ORANGE = '#ff8c00';
+        const PURPLE = '#b388ff';
+        const GOLD = '#ffd700';
+
+        // ── Radar Chart ──
+        const radarLabels = ['Retención', 'Engagement', 'Satisfacción', 'Frecuencia', 'Consumo', 'Lealtad'];
+        const avgForRadar = [
+            audienceData.reduce((s, d) => s + (d.satisf / 10) * 10, 0) / 150,
+            audienceData.reduce((s, d) => s + d.index, 0) / 150,
+            audienceData.reduce((s, d) => s + d.satisf, 0) / 150,
+            audienceData.reduce((s, d) => s + (d.freq / 9) * 10, 0) / 150,
+            audienceData.reduce((s, d) => s + (d.consumo / 180) * 10, 0) / 150,
+            audienceData.reduce((s, d) => s + (d.index / 10) * 8.5, 0) / 150,
+        ];
+
+        new Chart(document.getElementById('chart-radar'), {
+            type: 'radar',
+            data: {
+                labels: radarLabels,
+                datasets: [{
+                    label: 'Colombia Promedio',
+                    data: avgForRadar,
+                    borderColor: RED,
+                    backgroundColor: RED_T,
+                    pointBackgroundColor: RED,
+                    pointBorderColor: '#050505',
+                    pointHoverBackgroundColor: '#fff',
+                    borderWidth: 2
+                }, {
+                    label: 'Benchmark Regional',
+                    data: [6.5, 6.2, 6.8, 5.5, 6.0, 6.3],
+                    borderColor: 'rgba(255,255,255,0.2)',
+                    backgroundColor: 'rgba(255,255,255,0.03)',
+                    pointBackgroundColor: 'rgba(255,255,255,0.4)',
+                    borderWidth: 1,
+                    borderDash: [4, 4]
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        min: 0,
+                        max: 10,
+                        ticks: {
+                            stepSize: 2,
+                            color: '#555',
+                            backdropColor: 'transparent',
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.06)'
+                        },
+                        angleLines: {
+                            color: 'rgba(255,255,255,0.08)'
+                        },
+                        pointLabels: {
+                            color: '#999',
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 10
+                            },
+                            boxWidth: 12
+                        }
+                    }
+                }
+            }
+        });
+
+        // ── Doughnut ──
+        const tier1 = audienceData.filter(d => d.index >= 8).length;
+        const tier2 = audienceData.filter(d => d.index >= 5.5 && d.index < 8).length;
+        const tier3 = audienceData.filter(d => d.index < 5.5).length;
+
+        new Chart(document.getElementById('chart-doughnut'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Tier 1 (8–10)', 'Tier 2 (5.5–7.9)', 'Tier 3 (<5.5)'],
+                datasets: [{
+                    data: [tier1, tier2, tier3],
+                    backgroundColor: [GREEN_T, 'rgba(255,140,0,0.2)', RED_T],
+                    borderColor: [GREEN, ORANGE, RED],
+                    borderWidth: 2,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 10
+                            },
+                            boxWidth: 10,
+                            padding: 14
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => ` ${ctx.label}: ${ctx.raw} segmentos`
+                        }
+                    }
+                }
+            }
+        });
+
+        // ── Line Chart (Engagement evolution) ──
+        new Chart(document.getElementById('chart-line'), {
+            type: 'line',
+            data: {
+                labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+                datasets: [{
+                        label: 'Bogotá',
+                        data: [5.8, 6.1, 6.4, 6.9, 7.2, 7.6],
+                        borderColor: RED,
+                        backgroundColor: RED_T,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Medellín',
+                        data: [5.2, 5.5, 5.9, 6.2, 6.7, 7.0],
+                        borderColor: BLUE,
+                        backgroundColor: 'rgba(0,180,216,0.1)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Cali',
+                        data: [4.8, 4.9, 5.1, 5.0, 5.3, 5.6],
+                        borderColor: ORANGE,
+                        backgroundColor: 'rgba(255,140,0,0.1)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: false,
+                        pointRadius: 4
+                    },
+                    {
+                        label: 'Barranquilla',
+                        data: [5.5, 5.8, 6.0, 6.4, 6.5, 6.8],
+                        borderColor: PURPLE,
+                        backgroundColor: 'rgba(179,136,255,0.1)',
+                        tension: 0.4,
+                        borderWidth: 1.5,
+                        fill: false,
+                        pointRadius: 3,
+                        borderDash: [4, 4]
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        min: 4,
+                        max: 9,
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.04)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 10
+                            },
+                            boxWidth: 10
+                        }
+                    }
+                }
+            }
+        });
+
+        // ── Bar Chart (Top 15) ──
+        const sorted15 = [...audienceData].sort((a, b) => b.consumo - a.consumo).slice(0, 15);
+        new Chart(document.getElementById('chart-bar'), {
+            type: 'bar',
+            data: {
+                labels: sorted15.map(d => `${d.profile.split(' ').slice(0,2).join(' ')}`),
+                datasets: [{
+                    label: 'Consumo (min)',
+                    data: sorted15.map(d => d.consumo),
+                    backgroundColor: sorted15.map((_, i) => `rgba(229,9,20,${0.9 - i*0.04})`),
+                    borderColor: RED,
+                    borderWidth: 0,
+                    borderRadius: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.04)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // ── Scatter ──
+        new Chart(document.getElementById('chart-scatter'), {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Segmentos',
+                    data: audienceData.map(d => ({
+                        x: d.consumo,
+                        y: d.freq,
+                        r: d.satisf
+                    })),
+                    backgroundColor: audienceData.map(d =>
+                        d.index >= 8 ? 'rgba(0,212,122,0.6)' :
+                        d.index >= 5.5 ? 'rgba(255,140,0,0.6)' :
+                        'rgba(229,9,20,0.6)'
+                    ),
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Tiempo de Consumo (min)',
+                            font: {
+                                size: 10
+                            },
+                            color: '#888'
+                        },
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.04)'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Frecuencia (x/sem)',
+                            font: {
+                                size: 10
+                            },
+                            color: '#888'
+                        },
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.04)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => ` Consumo: ${ctx.raw.x}min · Freq: ${ctx.raw.y}x`
+                        }
+                    }
+                }
+            }
+        });
+
+        // ── Bubble Chart (Risk Matrix) ──
+        const channels = [{
+                name: 'Meta',
+                risk: 3.2,
+                eff: 8.4,
+                spend: 320,
+                color: BLUE
+            },
+            {
+                name: 'TikTok',
+                risk: 5.8,
+                eff: 9.1,
+                spend: 280,
+                color: PURPLE
+            },
+            {
+                name: 'YouTube',
+                risk: 2.1,
+                eff: 7.8,
+                spend: 210,
+                color: RED
+            },
+            {
+                name: 'Google Ads',
+                risk: 2.8,
+                eff: 8.0,
+                spend: 190,
+                color: GOLD
+            },
+            {
+                name: 'Programmatic',
+                risk: 6.4,
+                eff: 7.2,
+                spend: 150,
+                color: ORANGE
+            },
+            {
+                name: 'OOH Digital',
+                risk: 4.1,
+                eff: 6.5,
+                spend: 100,
+                color: GREEN
+            },
+            {
+                name: 'Influencers',
+                risk: 7.2,
+                eff: 7.9,
+                spend: 130,
+                color: '#ff69b4'
+            },
+            {
+                name: 'Email/Push',
+                risk: 1.5,
+                eff: 5.8,
+                spend: 70,
+                color: '#aaa'
+            }
+        ];
+
+        const channelBreakdown = [{
+                name: 'Meta Ads (IG/FB)',
+                reach: '119.5M',
+                impressions: '501.9M',
+                freq: '4.2x',
+                engagement: '88%',
+                risk: 2.5,
+                spend: 312.5
+            },
+            {
+                name: 'TikTok Spark Ads',
+                reach: '61.9M',
+                impressions: '359.0M',
+                freq: '5.8x',
+                engagement: '43%',
+                risk: 5.0,
+                spend: 250.0
+            },
+            {
+                name: 'YouTube Takeover',
+                reach: '80.2M',
+                impressions: '168.4M',
+                freq: '2.1x',
+                engagement: '70%',
+                risk: 2.2,
+                spend: 187.5
+            },
+            {
+                name: 'Connected TV',
+                reach: '67.5M',
+                impressions: '121.5M',
+                freq: '1.8x',
+                engagement: '81%',
+                risk: 2.0,
+                spend: 150.0
+            },
+            {
+                name: 'Twitch Mid-Rolls',
+                reach: '22.5M',
+                impressions: '146.3M',
+                freq: '6.5x',
+                engagement: '26%',
+                risk: 8.5,
+                spend: 125.0
+            },
+            {
+                name: 'Influencer Elite',
+                reach: '11.3M',
+                impressions: '36.2M',
+                freq: '3.2x',
+                engagement: '15%',
+                risk: 8.8,
+                spend: 100.0
+            },
+            {
+                name: 'Spotify Podcasts',
+                reach: '25.3M',
+                impressions: '63.3M',
+                freq: '2.5x',
+                engagement: '49%',
+                risk: 3.0,
+                spend: 75.0
+            },
+            {
+                name: 'Google Search',
+                reach: '23.6M',
+                impressions: '28.3M',
+                freq: '1.2x',
+                engagement: '67%',
+                risk: 2.0,
+                spend: 50.0
+            }
+        ];
+        new Chart(document.getElementById('chart-bubble'), {
+            type: 'bubble',
+            data: {
+                datasets: channels.map(c => ({
+                    label: c.name,
+                    data: [{
+                        x: c.risk,
+                        y: c.eff,
+                        r: c.spend / 30
+                    }],
+                    backgroundColor: c.color + '99',
+                    borderColor: c.color,
+                    borderWidth: 1.5
+                }))
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 10,
+                        title: {
+                            display: true,
+                            text: 'Nivel de Riesgo',
+                            font: {
+                                size: 10
+                            },
+                            color: '#888'
+                        },
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.04)'
+                        }
+                    },
+                    y: {
+                        min: 4,
+                        max: 10,
+                        title: {
+                            display: true,
+                            text: 'Eficiencia',
+                            font: {
+                                size: 10
+                            },
+                            color: '#888'
+                        },
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.04)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 9
+                            },
+                            boxWidth: 10
+                        },
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // ── Channel Table ──
+        const channelTableEl = document.getElementById('channel-table');
+        channelTableEl.innerHTML = channelBreakdown.map(c => {
+            const riskPct = c.risk * 10;
+
+            const riskColor =
+                c.risk < 3 ? GREEN :
+                c.risk < 5 ? GOLD :
+                c.risk < 6.5 ? ORANGE :
+                RED;
+
+            return `
+  <div class="channel-row" style="display:grid;grid-template-columns: 220px 1fr 80px 100px;align-items:center;gap:16px">
+    
+    <!-- Canal -->
+    <div class="channel-name" style="width:auto">
+      ${c.name}
+    </div>
+
+    <!-- Métricas distribuidas -->
+    <div style="display:grid;grid-template-columns: repeat(4,1fr);gap:12px;font-size:11px;color:var(--text-dim)">
+      <span><strong>Alcance:</strong> ${c.reach}</span>
+      <span><strong>Imp:</strong> ${c.impressions}</span>
+      <span><strong>Freq:</strong> ${c.freq}</span>
+      <span><strong>Eng:</strong> ${c.engagement}</span>
+    </div>
+
+    <!-- Barra de riesgo -->
+    <div class="channel-bar-wrap" style="height:8px">
+      <div class="channel-bar" style="width:${riskPct}%;background:${riskColor}"></div>
+    </div>
+
+    <!-- Inversión -->
+    <div style="text-align:right;font-size:12px;color:var(--red);font-weight:600">
+      $${c.spend}M
+    </div>
+
+  </div>`;
+        }).join('');
+
+        // ── Funnel ──
+        const funnelSteps = [{
+                label: 'Population',
+                pct: 100,
+                drop: null,
+                color: '#888'
+            },
+            {
+                label: 'Awareness',
+                pct: 72,
+                drop: -28,
+                color: BLUE
+            },
+            {
+                label: 'Consideration',
+                pct: 51,
+                drop: -21,
+                color: PURPLE
+            },
+            {
+                label: 'Trial / Free',
+                pct: 34,
+                drop: -17,
+                color: GOLD
+            },
+            {
+                label: 'Conversion',
+                pct: 21,
+                drop: -13,
+                color: ORANGE
+            },
+            {
+                label: 'Retención 30d',
+                pct: 16,
+                drop: -5,
+                color: RED
+            },
+            {
+                label: 'Advocacy',
+                pct: 9,
+                drop: -7,
+                color: GREEN
+            }
+        ];
+
+        document.getElementById('funnel-container').innerHTML = funnelSteps.map(s => `
+  <div class="funnel-step" style="border-left-color:${s.color}">
+    <div style="width:${s.pct*2.2}px;min-width:60px;max-width:220px;height:32px;border-radius:4px;background:${s.color}22;border:1px solid ${s.color}44;display:flex;align-items:center;justify-content:flex-end;padding:0 10px">
+      <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:${s.color}">${s.pct}%</span>
+    </div>
+    <span class="funnel-label" style="color:${s.color}">${s.label}</span>
+    ${s.drop !== null ? `<span class="funnel-drop">↓ ${Math.abs(s.drop)}% drop-off</span>` : '<span class="funnel-drop" style="color:var(--text-dim)">Base</span>'}
+  </div>
+`).join('');
+
+        // ── Churn Chart ──
+        const weeks = ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12'];
+        const churnActual = [8.4, 7.9, 7.6, 7.2, 6.8, 6.5, null, null, null, null, null, null];
+        const churnProj = [null, null, null, null, null, 6.5, 6.1, 5.7, 5.2, 4.8, 4.3, 3.9];
+        const churnTarget = [7, 7, 7, 7, 7, 7, 5, 5, 5, 4, 4, 4];
+
+        new Chart(document.getElementById('chart-churn'), {
+            type: 'line',
+            data: {
+                labels: weeks,
+                datasets: [{
+                        label: 'Churn Real (%)',
+                        data: churnActual,
+                        borderColor: RED,
+                        backgroundColor: RED_T,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: RED,
+                        spanGaps: false
+                    },
+                    {
+                        label: 'Proyección (%)',
+                        data: churnProj,
+                        borderColor: GREEN,
+                        backgroundColor: GREEN_T,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true,
+                        borderDash: [6, 4],
+                        pointRadius: 4,
+                        pointBackgroundColor: GREEN,
+                        spanGaps: false
+                    },
+                    {
+                        label: 'Target Estratégico',
+                        data: churnTarget,
+                        borderColor: 'rgba(255,215,0,0.4)',
+                        backgroundColor: 'transparent',
+                        tension: 0,
+                        borderWidth: 1.5,
+                        borderDash: [3, 3],
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 10,
+                        ticks: {
+                            callback: v => v + '%',
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255,255,255,0.04)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            font: {
+                                size: 10
+                            },
+                            boxWidth: 10
+                        }
+                    }
+                }
+            }
+        });
+
+        // ══════════════════════════════════
+        //  TAB NAVIGATION
+        // ══════════════════════════════════
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('tab-' + target).classList.add('active');
+            });
+        });
+
+        // ══════════════════════════════════
+        //  CLOCK
+        // ══════════════════════════════════
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent =
+                now.toLocaleTimeString('es-CO', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // ══════════════════════════════════
+        //  INIT
+        // ══════════════════════════════════
+        calcKPIs();
+        const genreData = [{
+                name: 'Drama',
+                value: 32
+            },
+            {
+                name: 'Acción',
+                value: 27
+            },
+            {
+                name: 'Comedia',
+                value: 21
+            },
+            {
+                name: 'Thriller',
+                value: 12
+            },
+            {
+                name: 'Documental',
+                value: 8
+            }
+        ];
+
+        // ordenar y tomar top 3
+        const topGenres = genreData
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 3);
+
+        // render
+        document.getElementById('top-genres').innerHTML = topGenres.map((g, i) => `
+  <div style="margin-bottom:12px">
+
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+      <span>${i+1}. ${g.name}</span>
+      <span style="font-family:'Orbitron',sans-serif">${g.value}%</span>
+    </div>
+
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:${g.value}%;background:var(--red)"></div>
+    </div>
+
+  </div>
+`).join('');
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
