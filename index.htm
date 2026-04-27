@@ -1,0 +1,2266 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Strat-OS · Colombia Intelligence Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        :root {
+            --bg: #050505;
+            --bg2: #0a0a0a;
+            --bg3: #0f0f0f;
+            --red: #E50914;
+            --red2: #ff1e2d;
+            --red-dim: rgba(229, 9, 20, 0.15);
+            --red-glow: rgba(229, 9, 20, 0.4);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.07);
+            --glass-border-red: rgba(229, 9, 20, 0.3);
+            --text: #f0f0f0;
+            --text-dim: #888;
+            --text-dimmer: #444;
+            --green: #00d47a;
+            --orange: #ff8c00;
+            --blue: #00b4d8;
+            --purple: #b388ff;
+            --gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -20%;
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(ellipse, rgba(229, 9, 20, 0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            right: -10%;
+            width: 50%;
+            height: 50%;
+            background: radial-gradient(ellipse, rgba(229, 9, 20, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ─── HEADER ─── */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 5, 0.92);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-n {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 22px;
+            color: var(--red);
+            letter-spacing: -1px;
+            text-shadow: 0 0 20px var(--red-glow);
+        }
+
+        .logo-sep {
+            width: 1px;
+            height: 28px;
+            background: var(--glass-border);
+        }
+
+        .logo-sub {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--green);
+            text-transform: uppercase;
+        }
+
+        .live-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 212, 122, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(0, 212, 122, 0);
+            }
+        }
+
+        .header-time {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+        }
+
+        .colombia-flag {
+            font-size: 18px;
+        }
+
+        /* ─── TABS ─── */
+        .tabs-container {
+            position: sticky;
+            top: 64px;
+            z-index: 99;
+            background: rgba(5, 5, 5, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 32px;
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            color: var(--red);
+            border-bottom-color: var(--red);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--red-glow), transparent);
+        }
+
+        .tab-btn i {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            padding: 28px 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ─── GLASS CARD ─── */
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+
+        .card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        }
+
+        .card.red-accent {
+            border-color: var(--glass-border-red);
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.05) 0%, var(--glass) 100%);
+        }
+
+        .card.red-accent::before {
+            background: linear-gradient(90deg, transparent, var(--red-glow), transparent);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* ─── KPI CARDS ─── */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .kpi-card:hover {
+            border-color: var(--glass-border-red);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(229, 9, 20, 0.1);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--red), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .kpi-card:hover::after {
+            opacity: 1;
+        }
+
+        .kpi-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .kpi-label i {
+            width: 12px;
+            height: 12px;
+            color: var(--red);
+        }
+
+        .kpi-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .kpi-unit {
+            font-size: 14px;
+            color: var(--text-dim);
+            margin-left: 4px;
+        }
+
+        .kpi-trend {
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .kpi-trend.up {
+            color: var(--green);
+        }
+
+        .kpi-trend.down {
+            color: var(--red);
+        }
+
+        .kpi-trend i {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* ─── GRIDS ─── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-65 {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 16px;
+        }
+
+        .grid-75 {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 16px;
+        }
+
+        .mb16 {
+            margin-bottom: 16px;
+        }
+
+        .mb24 {
+            margin-bottom: 24px;
+        }
+
+        /* Chart containers */
+        .chart-wrap {
+            position: relative;
+            width: 100%;
+        }
+
+        /* ─── TABLE ─── */
+        .table-wrap {
+            overflow-x: auto;
+            max-height: 560px;
+            overflow-y: auto;
+        }
+
+        .table-wrap::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+
+        .table-wrap::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .table-wrap::-webkit-scrollbar-thumb {
+            background: var(--glass-border-red);
+            border-radius: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background: #0d0d0d;
+            padding: 10px 14px;
+            text-align: left;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            border-bottom: 1px solid var(--glass-border-red);
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(229, 9, 20, 0.04);
+        }
+
+        tbody td {
+            padding: 9px 14px;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .td-audience {
+            max-width: 220px;
+        }
+
+        .td-profile {
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .td-behavior {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .badge-green {
+            background: rgba(0, 212, 122, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(0, 212, 122, 0.3);
+        }
+
+        .badge-orange {
+            background: rgba(255, 140, 0, 0.15);
+            color: var(--orange);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+        }
+
+        .badge-red {
+            background: rgba(229, 9, 20, 0.15);
+            color: #ff5555;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .city-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+        }
+
+        .city-dot::before {
+            content: '';
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--red);
+            flex-shrink: 0;
+        }
+
+        /* ─── ALERTS ─── */
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 8px;
+        }
+
+        .alert-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .alert-dot.critical {
+            background: var(--red);
+            box-shadow: 0 0 8px var(--red-glow);
+        }
+
+        .alert-dot.warning {
+            background: var(--orange);
+            box-shadow: 0 0 8px rgba(255, 140, 0, 0.4);
+        }
+
+        .alert-dot.info {
+            background: var(--blue);
+            box-shadow: 0 0 8px rgba(0, 180, 216, 0.4);
+        }
+
+        .alert-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+
+        .alert-desc {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        /* Progress Bar */
+        .progress-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 11px;
+        }
+
+        .progress-bar-track {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        /* ─── FUNNEL ─── */
+        .funnel-step {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 16px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid;
+            position: relative;
+        }
+
+        .funnel-bar {
+            height: 36px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
+            min-width: 80px;
+            justify-content: flex-end;
+        }
+
+        .funnel-label {
+            font-size: 12px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .funnel-pct {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .funnel-drop {
+            font-size: 10px;
+            color: var(--red);
+            margin-left: auto;
+        }
+
+        /* ─── ROI METRICS ─── */
+        .roi-metric {
+            text-align: center;
+            padding: 24px 16px;
+            border-radius: 10px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+        }
+
+        .roi-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .roi-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+        }
+
+        /* Channel table */
+        .channel-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 12px;
+        }
+
+        .channel-name {
+            width: 80px;
+            font-weight: 600;
+        }
+
+        .channel-bar-wrap {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .channel-bar {
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .channel-risk {
+            width: 50px;
+            text-align: right;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        /* ─── SECTION TITLE ─── */
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--red-dim), transparent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-2,
+            .grid-3,
+            .grid-4,
+            .grid-65,
+            .grid-75 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            header,
+            .tabs-container {
+                padding: 0 16px;
+            }
+
+            main {
+                padding: 16px;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Animate in */
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tab-panel.active .card,
+        .tab-panel.active .kpi-card {
+            animation: fade-up 0.4s ease both;
+        }
+
+        .tab-panel.active .kpi-card:nth-child(2) {
+            animation-delay: 0.05s;
+        }
+
+        .tab-panel.active .kpi-card:nth-child(3) {
+            animation-delay: 0.1s;
+        }
+
+        .tab-panel.active .kpi-card:nth-child(4) {
+            animation-delay: 0.15s;
+        }
+
+        /* Search */
+        .search-input {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.3s;
+            width: 220px;
+        }
+
+        .search-input:focus {
+            border-color: var(--glass-border-red);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-dimmer);
+        }
+
+        .count-badge {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            color: var(--text-dim);
+            padding: 4px 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 4px;
+        }
+        /* ─── AUDIENCE CARDS ─── */
+        .aud-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            cursor: pointer;
+        }
+        .aud-card:hover {
+            border-color: var(--glass-border-red);
+            box-shadow: 0 4px 24px rgba(229,9,20,0.08);
+        }
+        .aud-card-header {
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .aud-card-id {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+        .aud-card-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 3px;
+        }
+        .aud-card-traits {
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+        .aud-card-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+        .aud-card-city {
+            font-size: 10px;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .aud-card-city::before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--red);
+        }
+        .aud-card-edad {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 9px;
+            color: var(--text-dimmer);
+            letter-spacing: 1px;
+        }
+        .aud-card-metrics {
+            padding: 8px 16px 12px;
+            display: flex;
+            gap: 16px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .aud-metric-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .aud-metric-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .aud-metric-lbl {
+            font-size: 8px;
+            color: var(--text-dimmer);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .aud-expand-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--text-dimmer);
+            cursor: pointer;
+            transition: color 0.2s, background 0.2s;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .aud-expand-btn:hover {
+            color: var(--red);
+            background: rgba(229,9,20,0.04);
+        }
+        .aud-expand-btn .expand-arrow {
+            transition: transform 0.3s;
+            font-size: 9px;
+        }
+        .aud-expand-btn.open .expand-arrow {
+            transform: rotate(180deg);
+        }
+        .aud-detail {
+            display: none;
+            padding: 14px 16px 16px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            background: rgba(0,0,0,0.2);
+        }
+        .aud-detail.open {
+            display: block;
+        }
+        .aud-detail-section {
+            margin-bottom: 12px;
+        }
+        .aud-detail-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 4px;
+        }
+        .aud-detail-text {
+            font-size: 11px;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+        .aud-5w-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .aud-5w-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 8px 10px;
+        }
+        .aud-5w-key {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 8px;
+            color: var(--red);
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+        .aud-5w-val {
+            font-size: 10px;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+        .aud-detail-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .aud-stat-box {
+            text-align: center;
+            padding: 8px 4px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .aud-stat-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .aud-stat-lbl {
+            font-size: 8px;
+            color: var(--text-dimmer);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <span class="logo-n">N</span>
+            <div class="logo-sep"></div>
+            <div>
+                <div class="logo-sub">Strat·OS</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="live-badge">
+                <div class="live-dot"></div>En Vivo
+            </div>
+            <div class="header-time" id="clock">00:00:00</div>
+            <span class="colombia-flag">🇨🇴</span>
+        </div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" data-tab="resumen"><i data-lucide="layout-dashboard"></i>Resumen</button>
+        <button class="tab-btn" data-tab="audiencias"><i data-lucide="users"></i>Audiencias</button>
+        <button class="tab-btn" data-tab="graficas"><i data-lucide="bar-chart-2"></i>Gráficas</button>
+        <button class="tab-btn" data-tab="publicidad"><i data-lucide="megaphone"></i>Publicidad</button>
+        <button class="tab-btn" data-tab="estrategia"><i data-lucide="target"></i>Estrategia</button>
+    </div>
+
+    <main>
+
+        <!-- ════════════ TAB: RESUMEN ════════════ -->
+        <div class="tab-panel active" id="tab-resumen">
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="clock"></i>Tiempo de Consumo</div>
+                    <div class="kpi-value"><span id="kpi-tiempo">—</span><span class="kpi-unit">min</span></div>
+                    <div class="kpi-trend up" id="kpi-tiempo-trend"><i data-lucide="trending-up"></i>+8.3% vs mes anterior</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="zap"></i>Engagement Index</div>
+                    <div class="kpi-value"><span id="kpi-engagement">—</span></div>
+                    <div class="kpi-trend up" id="kpi-eng-trend"><i data-lucide="trending-up"></i>+5.1% vs mes anterior</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="users"></i>Audiencias</div>
+                    <div class="kpi-value"><span id="kpi-audiencias">—</span></div>
+                    <div class="kpi-trend up"><i data-lucide="trending-up"></i>+1,990 nuevos segmentos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label"><i data-lucide="star"></i>UX Score</div>
+                    <div class="kpi-value"><span id="kpi-ux">—</span><span class="kpi-unit">/10</span></div>
+                    <div class="kpi-trend" id="kpi-ux-trend"><i data-lucide="trending-up"></i></div>
+                </div>
+            </div>
+
+            <div class="grid-65 mb24">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Radar de Comportamiento</span>
+                        <span style="font-size:10px;color:var(--text-dim)">Promedio 2000 segmentos</span>
+                    </div>
+                    <div class="chart-wrap" style="height:280px">
+                        <canvas id="chart-radar"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Engagement Quartiles</span>
+                    </div>
+                    <div class="chart-wrap" style="height:280px">
+                        <canvas id="chart-doughnut"></canvas>
+                    </div>
+                </div>
+            </div>
+<div class="card mb24" style="border-color:var(--glass-border-red);background:linear-gradient(135deg,rgba(229,9,20,0.04) 0%,var(--glass) 100%);">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(229,9,20,0.2);">
+        <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:3px;height:28px;background:var(--red);border-radius:2px;box-shadow:0 0 8px var(--red-glow);"></div>
+            <div>
+                <div style="font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:3px;">Target Audience Profile</div>
+                <div id="target-perfil" style="font-size:15px;font-weight:600;color:var(--text);">—</div>
+            </div>
+        </div>
+        <div style="padding:6px 12px;background:var(--red-dim);border:1px solid rgba(229,9,20,0.3);border-radius:6px;text-align:center;">
+            <div style="font-family:'Orbitron',sans-serif;font-size:9px;color:var(--red);letter-spacing:1px;">ENGAGEMENT</div>
+            <div style="font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;color:var(--red);">BAJO</div>
+            <div style="font-size:9px;color:var(--text-dimmer);margin-top:1px;">Índice ≈ 5.3/10</div>
+        </div>
+    </div>
+
+    <!-- Body: 3 columns -->
+    <div style="display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+        <!-- Contenido -->
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:14px;">
+            <div style="font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;margin-bottom:8px;">📺 Qué Consume</div>
+            <p id="target-contenido" style="font-size:11px;color:var(--text-dim);line-height:1.6;">—</p>
+        </div>
+        <!-- Método -->
+        <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:14px;">
+            <div style="font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--purple);text-transform:uppercase;margin-bottom:8px;">📱 Cómo Consume</div>
+            <p id="target-metodo" style="font-size:11px;color:var(--text-dim);line-height:1.6;">—</p>
+        </div>
+        <!-- Horario + Zona -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:12px;flex:1;">
+                <div style="font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;">🕐 Horario</div>
+                <div id="target-horario" style="font-size:11px;color:var(--text);font-weight:500;line-height:1.5;">—</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:12px;flex:1;">
+                <div style="font-family:'Orbitron',sans-serif;font-size:8px;letter-spacing:2px;color:var(--green);text-transform:uppercase;margin-bottom:6px;">📍 Geografía</div>
+                <div id="target-zona" style="font-size:11px;color:var(--text);font-weight:500;line-height:1.5;">—</div>
+            </div>
+        </div>
+    </div>
+</div>
+            <div class="grid-65">
+                 <div class="card" style="margin-top:16px;">
+                    <div class="card-header">
+                        <span class="card-title">Top 3 Géneros Más Consumidos</span>
+                    </div>
+
+                    <div id="top-genres"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Alertas Críticas</span>
+                        <span style="font-size:10px;color:var(--red)">3 activas</span>
+                    </div>
+                <div class="card mb24">
+    <div class="card-header">
+        <span class="card-title">Principales Barreras de Retención y Engagement</span>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Motivo</th>
+                    <th>% Usuarios Afectados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Serial Churning (suscripción por contenido específico)</td>
+                    <td><span class="badge badge-orange">23%</span></td>
+                </tr>
+                <tr>
+                    <td>Fatiga de decisión / dificultad para encontrar contenido</td>
+                    <td><span class="badge badge-red">49%</span></td>
+                </tr>
+                <tr>
+                    <td>Sensibilidad al precio / costo percibido alto</td>
+                    <td><span class="badge badge-red">45%</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+               
+                    <div class="alert-item">
+                        <div class="alert-dot critical"></div>
+                        <div>
+                            <div class="alert-title">⚡ Cali Drop-off Detectado</div>
+                            <div class="alert-desc">Segmentos de Cali muestran una caída del 23% en retención entre minutos 40–60. Requiere acción inmediata en recomendación de contenido.</div>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-dot warning"></div>
+                        <div>
+                            <div class="alert-title">🎯 Gen Z Engagement Bajo</div>
+                            <div class="alert-desc">Audiencias 18–24 años presentan índice de 4.8 promedio. 34% por debajo del benchmark regional. Priorizar contenido nativo y micro-series.</div>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-dot info"></div>
+                        <div>
+                            <div class="alert-title">📈 Bogotá Spike Identificado</div>
+                            <div class="alert-desc">Pico de consumo +41% en segmento corporativo Bogotá (Tier 1). Oportunidad para activación de campaña premium en horario nocturno.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Content Mix Colombia</span>
+                    </div>
+                    <div style="margin-bottom:20px">
+                        <div class="progress-row">
+                            <span style="color:var(--red);font-weight:600;font-size:12px">🇨🇴 Contenido Local</span>
+                            <span style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--red)">42%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:42%;background:linear-gradient(90deg,var(--red),#ff4444)"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="progress-row">
+                            <span style="color:var(--blue);font-weight:600;font-size:12px">🌎 Contenido Global</span>
+                            <span style="font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--blue)">58%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:58%;background:linear-gradient(90deg,var(--blue),#48cae4)"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--glass-border)">
+                        <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase">Meta 2025: Elevar local a 50%</div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width:84%;background:linear-gradient(90deg,var(--gold),#ffaa00);"></div>
+                        </div>
+                        <div style="font-size:10px;color:var(--gold);margin-top:4px">84% del objetivo alcanzado</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ════════════ TAB: AUDIENCIAS ════════════ -->
+        <div class="tab-panel" id="tab-audiencias">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Librería de Segmentos · Colombia</span>
+                    <div style="display:flex;align-items:center;gap:12px">
+                        <input class="search-input" type="text" placeholder="Buscar audiencia..." id="search-audience">
+                        <span class="count-badge" id="row-count">10 registros</span>
+                    </div>
+                </div>
+                <div id="audience-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:4px 0;"></div>
+            </div>
+        </div>
+
+        <!-- ════════════ TAB: GRÁFICAS ════════════ -->
+        <div class="tab-panel" id="tab-graficas">
+            <div class="grid-2 mb24">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Evolución Engagement · Ene–Jun</span></div>
+                    <div class="chart-wrap" style="height:260px"><canvas id="chart-line"></canvas></div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Top 10 Audiencias por Consumo</span></div>
+                    <div class="chart-wrap" style="height:260px"><canvas id="chart-bar"></canvas></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Dispersión: Tiempo vs Frecuencia (2000 segmentos)</span>
+                    <span style="font-size:10px;color:var(--text-dim)">Tamaño de burbuja = Satisfacción</span>
+                </div>
+                <div class="chart-wrap" style="height:320px"><canvas id="chart-scatter"></canvas></div>
+            </div>
+        </div>
+
+        <!-- ════════════ TAB: PUBLICIDAD ════════════ -->
+        <div class="tab-panel" id="tab-publicidad">
+            <div class="grid-3 mb24">
+                <div class="roi-metric card red-accent">
+                    <div class="roi-value" style="color:var(--gold)">$1,250M</div>
+                    <div class="roi-label">Presupuesto Total COP</div>
+                </div>
+                <div class="roi-metric card">
+                    <div class="roi-value" style="color:var(--blue)">411.8M</div>
+                    <div class="roi-label">Alcance Impresiones</div>
+                </div>
+                <div class="roi-metric card red-accent">
+                    <div class="roi-value" style="color:var(--green)">82%</div>
+                    <div class="roi-label">ROI Promedio</div>
+                </div>
+            </div>
+
+            <div class="mb24">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Matriz Riesgo vs Eficiencia</span>
+                    </div>
+                    <div class="chart-wrap" style="height:300px">
+                        <canvas id="chart-bubble"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Desglose por Canal</span>
+                </div>
+                <div id="channel-table"></div>
+            </div>
+        </div>
+        </div>
+
+        <!-- ════════════ TAB: ESTRATEGIA ════════════ -->
+        <div class="tab-panel" id="tab-estrategia">
+            <div class="grid-2">
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Conversion Funnel Colombia · Promedio General</span>
+                        <span style="font-size:10px;color:var(--text-dim)">Base: 2,000 audiencias</span>
+                    </div>
+                    <div id="funnel-container"></div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Proyección de Churn Semanal</span>
+                        <span style="font-size:10px;color:var(--green)">↓ Reducción proyectada</span>
+                    </div>
+                    <div class="chart-wrap" style="height:320px"><canvas id="chart-churn"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Funnel per-audience breakdown -->
+            <div class="card" style="margin-top:16px;">
+                <div class="card-header">
+                    <span class="card-title">Desglose del Embudo por Audiencia Individual</span>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <input class="search-input" type="text" placeholder="Buscar segmento..." id="search-funnel" style="width:180px">
+                        <span class="count-badge" id="funnel-row-count">2000 audiencias</span>
+                    </div>
+                </div>
+                <div style="overflow-x:auto;max-height:420px;overflow-y:auto;" class="table-wrap">
+                    <table id="funnel-table">
+                        <thead>
+                            <tr>
+                                <th>Segmento</th>
+                                <th>Ciudad</th>
+                                <th>Edad</th>
+                                <th>Población</th>
+                                <th>Aware</th>
+                                <th>Consider</th>
+                                <th>Trial</th>
+                                <th>Conversión</th>
+                                <th>Retención 30d</th>
+                                <th>Advocacy</th>
+                                <th>Índice</th>
+                            </tr>
+                        </thead>
+                        <tbody id="funnel-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top:16px;padding:16px;">
+                <div class="card-header" style="margin-bottom:10px;">
+                    <span class="card-title">Proyección de Ingresos</span>
+                </div>
+
+                <div style="display:grid;grid-template-columns: repeat(3,1fr);gap:12px;">
+
+                    <!-- Crecimiento -->
+                    <div>
+                        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px">
+                            Crecimiento
+                        </div>
+
+                        <div style="font-family:'Orbitron';font-size:20px;color:var(--green);font-weight:700">
+                            +18%
+                        </div>
+
+                        <div style="font-size:10px;color:var(--text-dim)">
+                            +18,000 usuarios
+                        </div>
+                    </div>
+
+                    <!-- ARPU -->
+                    <div>
+                        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px">
+                            ARPU
+                        </div>
+                        <div style="font-family:'Orbitron';font-size:20px;color:var(--gold);font-weight:700">
+                            $42K
+                        </div>
+                    </div>
+
+                    <!-- Recaudo total -->
+                    <div>
+                        <div style="font-size:10px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px">
+                            Recaudo Proyectado
+                        </div>
+                        <div style="font-family:'Orbitron';font-size:20px;color:var(--red);font-weight:700">
+                            $756M
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+    // ══════════════════════════════════════════════════════════════════
+    //  GENERADOR DE 2,000 PERFILES ÚNICOS · NETFLIX COLOMBIA
+    //  Cada persona se construye combinando variables independientes.
+    //  No hay arquetipos fijos que se repitan — cada campo se selecciona
+    //  de sus propios catálogos, produciendo individuos distintos.
+    // ══════════════════════════════════════════════════════════════════
+
+    // ── Utilidades de aleatoriedad determinista ──────────────────────
+    // Pseudo-RNG de bajo costo basado en seno (sin dependencias externas).
+    // Dado el mismo id + salt siempre devuelve el mismo valor → reproducible.
+    function sr(id, salt) {
+        const x = Math.sin(id * 127.1 + salt * 311.7) * 43758.5453;
+        return x - Math.floor(x); // [0, 1)
+    }
+    function pick(id, salt, arr) { return arr[Math.floor(sr(id, salt) * arr.length)]; }
+    function rng(id, salt, min, max, dec = 1) {
+        return parseFloat((min + sr(id, salt) * (max - min)).toFixed(dec));
+    }
+    function pickW(id, salt, items, weights) {
+        const total = weights.reduce((a, b) => a + b, 0);
+        let r = sr(id, salt) * total;
+        for (let i = 0; i < items.length; i++) { r -= weights[i]; if (r <= 0) return items[i]; }
+        return items[items.length - 1];
+    }
+
+    // ── Catálogos de variables ────────────────────────────────────────
+    const NOMBRES_M = ['Andrés','Carlos','Diego','Felipe','Javier','Sebastián','Mateo','Daniel','Juan','Camilo','Alejandro','Miguel','Nicolás','Santiago','Esteban','Julián','Ricardo','Gustavo','Roberto','David','Iván','Mauricio','Fabio','Oscar','Héctor','Mario','Jorge','Pablo','Tomás','Sergio'];
+    const NOMBRES_F = ['Laura','Valentina','Sofía','Daniela','Camila','Isabella','María','Natalia','Alejandra','Paola','Andrea','Claudia','Marcela','Juliana','Carolina','Gabriela','Fernanda','Verónica','Manuela','Diana','Ximena','Catalina','Lucía','Adriana','Patricia','Mónica','Lorena','Sandra','Tatiana','Viviana'];
+    const APELLIDOS = ['García','Martínez','López','Rodríguez','González','Hernández','Pérez','Sánchez','Ramírez','Torres','Flores','Rivera','Gómez','Díaz','Vargas','Reyes','Morales','Jiménez','Castro','Ruiz','Ortiz','Núñez','Medina','Ramos','Acosta','Arias','Bermúdez','Cardona','Delgado','Escobar','Figueroa','Gutiérrez','Herrera','Infante','Jaramillo','Leal','Montoya','Nieto','Ospina','Quintero','Salazar','Trujillo','Uribe','Valencia','Zamora'];
+
+    const CIUDADES = ['Bogotá','Medellín','Cali','Barranquilla','Bucaramanga','Cartagena','Manizales','Pereira','Ibagué','Cúcuta','Santa Marta','Villavicencio','Pasto','Montería','Armenia'];
+    const CIUDAD_W = [35,25,20,12,8,6,4,4,3,3,3,2,2,2,2];
+
+    const EDADES_RANGO = [
+        {label:'16–17', min:16, max:17},
+        {label:'18–24', min:18, max:24},
+        {label:'25–34', min:25, max:34},
+        {label:'35–44', min:35, max:44},
+        {label:'45–54', min:45, max:54},
+        {label:'55–70', min:55, max:70},
+        {label:'71–80', min:71, max:80},
+    ];
+    const EDAD_W = [3,22,28,22,13,9,3];
+
+    const NSE = ['Bajo','Bajo-Medio','Medio','Medio-Alto','Alto'];
+    const NSE_W = [10,20,35,25,10];
+
+    const OCUPACIONES = [
+        'Estudiante universitario','Estudiante técnico','Recién egresado',
+        'Profesional independiente','Empleado administrativo','Ejecutivo de empresa',
+        'Docente','Médico / Personal de salud','Ingeniero','Abogado',
+        'Comerciante','Emprendedor','Ama de casa','Jubilado','Militar / Policía',
+        'Diseñador / Creativo','Periodista','Desarrollador de software','Conductor / Repartidor',
+        'Operario / Técnico','Artista / Músico','Influencer / Creador de contenido',
+        'Contador / Financiero','Arquitecto','Chef / Gastronómico'
+    ];
+
+    const CONVIVENCIA = [
+        'Con padres y hermanos','Con pareja sin hijos','Con pareja e hijos pequeños',
+        'Con pareja e hijos adolescentes','Solo/a','Con compañeros de cuarto',
+        'Con familia extensa','Con padres (adulto mayor)','En residencia universitaria'
+    ];
+    const CONVIVENCIA_W = [18,16,14,12,10,10,8,7,5];
+
+    const DISPOSITIVOS = ['Smartphone','Smart TV','Laptop','Tablet','Smart TV + Smartphone','Laptop + Smartphone','Smart TV + Tablet','Monitor PC'];
+    const DISPOSITIVO_W = [30,22,16,8,10,7,4,3];
+
+    const GENEROS_CONTENIDO = [
+        ['Drama','Thriller','Series de crimen'],
+        ['Comedia','Reality show','Entretenimiento ligero'],
+        ['Acción','Aventura','Superhéroes'],
+        ['Ciencia ficción','Fantasía','Animé'],
+        ['Documentales','Contenido educativo','Naturaleza'],
+        ['Contenido colombiano','Novelas latinoamericanas','Cultura local'],
+        ['K-drama','Contenido asiático','Animé'],
+        ['Romance','Drama familiar','Comedias románticas'],
+        ['Thriller político','Espionaje','Crimen organizado'],
+        ['Deportes','Biopics atléticos','Documentales deportivos'],
+        ['Terror','Suspenso psicológico','Misterio'],
+        ['Comedia adulta','Stand-up','Humor negro'],
+        ['Cine de autor','Películas independientes','Arte y cultura'],
+        ['Infantil y familiar','Animación','Aventura familiar'],
+        ['Historia y política','Docudrama','Biopics históricos']
+    ];
+    const GENERO_W = [12,10,10,8,8,9,6,8,7,5,5,4,3,4,3];
+
+    const FORMAS_CONSUMO = [
+        'Consumo activo con plena atención','Consumo multitarea (mientras trabaja o estudia)',
+        'Binge-watching en sesiones largas','Consumo fragmentado en pausas cortas',
+        'Background viewing (ruido de fondo)','Consumo en tránsito (transporte público)',
+        'Consumo social con pareja o amigos','Consumo nocturno de descompresión',
+        'Consumo en descansos laborales','Maratón de fin de semana'
+    ];
+
+    const HORARIOS = [
+        '06:00–08:00 (mañana temprana)','08:00–12:00 (mañana)','12:00–14:00 (mediodía)',
+        '14:00–17:00 (tarde)','17:00–19:00 (tarde-noche)','19:00–21:00 (prime time)',
+        '21:00–23:00 (noche)','23:00–01:00 (noche tardía)','01:00–04:00 (madrugada)',
+        'Fines de semana todo el día','Variable sin patrón fijo'
+    ];
+    const HORARIO_W = [3,5,6,7,8,12,15,14,5,15,10];
+
+    const LUGARES_CONSUMO = [
+        'Sala de casa','Habitación propia','Cocina / comedor','Transporte público',
+        'Oficina / lugar de trabajo','Cafetería o restaurante','Cuarto universitario',
+        'Casa de familia (visita)','Hotel / viaje de negocios','Espacio de coworking'
+    ];
+
+    const SATISFACCIONES = {
+        'Bajo': [3.5, 5.5],
+        'Bajo-Medio': [4.0, 6.0],
+        'Medio': [4.5, 6.5],
+        'Medio-Alto': [5.0, 7.5],
+        'Alto': [5.5, 8.5]
+    };
+
+    const PAIN_POINTS = [
+        'Falta de contenido colombiano relevante',
+        'Interfaz difícil de navegar',
+        'Precio percibido como alto',
+        'Catálogo repetitivo — pocas novedades',
+        'Algoritmo de recomendación poco acertado',
+        'Falta de contenido de nicho (animé, cine de autor)',
+        'Conexión a internet inestable afecta la experiencia',
+        'Cuenta compartida genera conflictos de perfil',
+        'Falta de contenido familiar adecuado',
+        'Exceso de contenido en inglés sin doblaje de calidad',
+        'Subtítulos en español deficientes',
+        'Falta de contenido deportivo en vivo',
+        'Dificultad para retomar series pausadas',
+        'Contenido infantil limitado para menores de 5 años',
+        'Publicidad excesiva en plan básico'
+    ];
+
+    const MOTIVACIONES = [
+        'Entretenimiento y evasión del estrés cotidiano',
+        'Conexión con pareja o familia al ver juntos',
+        'Consumo de contenido de calidad que no hay en TV abierta',
+        'Aprendizaje y cultura a través de documentales',
+        'Seguir series específicas de alto interés',
+        'Ocio nocturno como rutina de descanso',
+        'Descubrimiento de nuevas historias y culturas',
+        'Maratonear series completas en poco tiempo',
+        'Acceso a contenido colombiano y latinoamericano',
+        'Alternativa económica al cine',
+        'Consumo en tránsito para aprovechar el tiempo',
+        'Hábito establecido difícil de cambiar'
+    ];
+
+    // ── Generador principal ──────────────────────────────────────────
+    function generarPersona(id) {
+        const genero = sr(id, 0) < 0.52 ? 'M' : 'F';
+        const nombre = genero === 'M' ? pick(id, 1, NOMBRES_M) : pick(id, 1, NOMBRES_F);
+        const apellido1 = pick(id, 2, APELLIDOS);
+        const apellido2 = pick(id, 3, APELLIDOS);
+        const nombreCompleto = `${nombre} ${apellido1} ${apellido2}`;
+
+        const ciudad = pickW(id, 4, CIUDADES, CIUDAD_W);
+        const edadRango = pickW(id, 5, EDADES_RANGO, EDAD_W);
+        const edadExacta = Math.floor(edadRango.min + sr(id, 6) * (edadRango.max - edadRango.min + 1));
+        const nse = pickW(id, 7, NSE, NSE_W);
+        const ocupacion = pick(id, 8, OCUPACIONES);
+        const convivencia = pickW(id, 9, CONVIVENCIA, CONVIVENCIA_W);
+        const dispositivo = pickW(id, 10, DISPOSITIVOS, DISPOSITIVO_W);
+        const generosIdx = Math.floor(sr(id, 11) * GENEROS_CONTENIDO.length);
+        const generosArr = GENEROS_CONTENIDO[generosIdx];
+        const gustos = generosArr.join(', ');
+        const formaConsumo = pick(id, 12, FORMAS_CONSUMO);
+        const horario = pickW(id, 13, HORARIOS, HORARIO_W);
+        const lugar = pick(id, 14, LUGARES_CONSUMO);
+        const painPoint = pick(id, 15, PAIN_POINTS);
+        const motivacion = pick(id, 16, MOTIVACIONES);
+
+        // Métricas numéricas — influenciadas por edad, NSE y género de contenido
+        const nseIdx = NSE.indexOf(nse);
+        const edadFactor = edadExacta < 25 ? 0.9 : edadExacta < 45 ? 1.0 : edadExacta < 60 ? 0.95 : 0.8;
+        const nseFactor = 0.8 + nseIdx * 0.08;
+
+        const satisfRange = SATISFACCIONES[nse];
+        const satisfBase = satisfRange[0] + sr(id, 17) * (satisfRange[1] - satisfRange[0]);
+        const satisf = parseFloat((satisfBase * edadFactor).toFixed(1));
+
+        // Consumo: afectado por forma de consumo y dispositivo
+        const consumoBase = dispositivo.includes('Smart TV') ? rng(id, 18, 50, 140) :
+                            dispositivo === 'Smartphone' ? rng(id, 18, 25, 80) :
+                            rng(id, 18, 35, 110);
+        const consumo = Math.round(consumoBase * (0.85 + sr(id, 19) * 0.3));
+
+        // Frecuencia: afectada por ocupación y convivencia
+        const freqBase = ocupacion.includes('Jubilado') || convivencia.includes('Solo') ? rng(id, 20, 3, 7) :
+                         ocupacion.includes('Estudiante') ? rng(id, 20, 2.5, 6) :
+                         rng(id, 20, 1.0, 5.5);
+        const freq = parseFloat(freqBase.toFixed(1));
+
+        // Índice: combinación ponderada de satisf, freq y consumo normalizados
+        const indexRaw = (satisf / 10) * 4.5 + (freq / 9) * 3.0 + (consumo / 180) * 2.5 + sr(id, 21) * 0.5;
+        const index = parseFloat(Math.min(10, Math.max(1, indexRaw)).toFixed(2));
+
+        // Perfil narrativo generado por combinación de variables
+        const pronombre = genero === 'M' ? 'Hombre' : 'Mujer';
+        const perfil = `${pronombre} de ${edadExacta} años, ${nse.toLowerCase()} NSE. ${ocupacion} en ${ciudad}. Vive ${convivencia.toLowerCase()}. Su motivación principal es ${motivacion.toLowerCase()}. Principal barrera: ${painPoint.toLowerCase()}.`;
+
+        const quien = `${nombreCompleto}, ${edadExacta} años, ${pronombre.toLowerCase()}, ${ocupacion}, NSE ${nse}, residente en ${ciudad}.`;
+        const que = `Prefiere ${gustos}. ${motivacion}.`;
+        const como = `${formaConsumo}. Dispositivo principal: ${dispositivo}.`;
+        const cuando = horario;
+        const donde = lugar;
+
+        // Behavior tag (derivado de forma de consumo + dispositivo)
+        const behavior = `${formaConsumo.split(' ')[0]} ${formaConsumo.split(' ')[1] || ''} · ${dispositivo}`.trim();
+
+        // Profile label (basado en ocupación + rango de edad)
+        const profileLabel = `${ocupacion} · ${edadRango.label}`;
+
+        return {
+            id,
+            nombre: nombreCompleto,
+            profile: profileLabel,
+            behavior,
+            city: ciudad,
+            ciudad,
+            edad: edadRango.label,
+            edadExacta,
+            genero,
+            nse,
+            ocupacion,
+            vivienda: convivencia,
+            device: dispositivo,
+            gustos,
+            perfil,
+            quien,
+            que,
+            como,
+            cuando,
+            donde,
+            motivacion,
+            painPoint,
+            consumo: Math.max(15, Math.min(180, consumo)),
+            freq: Math.max(0.5, Math.min(9, freq)),
+            satisf: Math.max(1, Math.min(10, satisf)),
+            index: Math.max(1, Math.min(10, index))
+        };
+    }
+
+    // ── Generar los 2,000 perfiles ───────────────────────────────────
+    console.time('generando audiencias');
+    const audienceData = [];
+    for (let i = 1; i <= 2000; i++) audienceData.push(generarPersona(i));
+    console.timeEnd('generando audiencias');
+
+    // ══════════════════════════════════
+    //  KPIs
+    // ══════════════════════════════════
+    function calcKPIs() {
+        const n = audienceData.length;
+        const avgConsumo = (audienceData.reduce((s, d) => s + d.consumo, 0) / n).toFixed(0);
+        const avgIndex   = (audienceData.reduce((s, d) => s + d.index,   0) / n).toFixed(2);
+        const avgUX      = (audienceData.reduce((s, d) => s + d.satisf,  0) / n).toFixed(1);
+
+        document.getElementById('kpi-tiempo').textContent     = avgConsumo;
+        document.getElementById('kpi-engagement').textContent = avgIndex;
+        document.getElementById('kpi-ux').textContent         = avgUX;
+        document.getElementById('kpi-audiencias').textContent = n.toLocaleString('es-CO');
+
+        const uxTrend = document.getElementById('kpi-ux-trend');
+        if (parseFloat(avgUX) >= 6.5) {
+            uxTrend.className = 'kpi-trend up';
+            uxTrend.innerHTML = '<i data-lucide="trending-up"></i>+3.7% vs mes anterior';
+        } else {
+            uxTrend.className = 'kpi-trend down';
+            uxTrend.innerHTML = '<i data-lucide="trending-down"></i>-2.1% vs mes anterior';
+        }
+        lucide.createIcons();
+    }
+
+    // ══════════════════════════════════
+    //  AUDIENCE CARDS (paginadas)
+    // ══════════════════════════════════
+    const PAGE_SIZE = 40;
+    let currentPage = 0;
+    let filteredData = [...audienceData];
+
+    function renderCards(data, append = false) {
+        const grid = document.getElementById('audience-cards-grid');
+        if (!append) { grid.innerHTML = ''; currentPage = 0; }
+
+        const start = currentPage * PAGE_SIZE;
+        const slice = data.slice(start, start + PAGE_SIZE);
+
+        const html = slice.map(d => {
+            const idxColor  = d.index >= 6 ? 'var(--green)' : d.index >= 5 ? 'var(--orange)' : 'var(--red)';
+            const satColor  = d.satisf >= 6.5 ? 'var(--green)' : d.satisf >= 5 ? 'var(--orange)' : 'var(--red)';
+            const idxBadge  = d.index >= 6 ? 'badge-green' : d.index >= 5 ? 'badge-orange' : 'badge-red';
+            const generoIcon = d.genero === 'M' ? '♂' : '♀';
+            return `
+<div class="aud-card">
+  <div class="aud-card-header" onclick="toggleDetail(${d.id})">
+    <div style="flex:1">
+      <div class="aud-card-id">SEG · ${String(d.id).padStart(4,'0')}</div>
+      <div class="aud-card-name">${d.nombre} <span style="font-size:10px;color:var(--text-dimmer)">${generoIcon} ${d.edadExacta} años</span></div>
+      <div class="aud-card-traits">${d.ocupacion}</div>
+    </div>
+    <div class="aud-card-meta">
+      <span class="aud-card-city">${d.city}</span>
+      <span class="aud-card-edad">${d.edad} · ${d.nse}</span>
+      <span class="badge ${idxBadge}" style="margin-top:4px">${d.index}</span>
+    </div>
+  </div>
+
+  <div class="aud-card-metrics">
+    <div class="aud-metric-item">
+      <span class="aud-metric-val" style="color:var(--blue)">${d.consumo}<span style="font-size:9px;color:var(--text-dimmer)">min</span></span>
+      <span class="aud-metric-lbl">Consumo</span>
+    </div>
+    <div class="aud-metric-item">
+      <span class="aud-metric-val" style="color:var(--purple)">${d.freq}<span style="font-size:9px;color:var(--text-dimmer)">/sem</span></span>
+      <span class="aud-metric-lbl">Frecuencia</span>
+    </div>
+    <div class="aud-metric-item">
+      <span class="aud-metric-val" style="color:${satColor}">${d.satisf}</span>
+      <span class="aud-metric-lbl">Satisf.</span>
+    </div>
+    <div class="aud-metric-item">
+      <span class="aud-metric-val" style="color:${idxColor}">${d.index}</span>
+      <span class="aud-metric-lbl">Índice</span>
+    </div>
+  </div>
+
+  <button class="aud-expand-btn" id="btn-${d.id}" onclick="toggleDetail(${d.id})">
+    <span>Ver perfil completo</span>
+    <span class="expand-arrow">▼</span>
+  </button>
+
+  <div class="aud-detail" id="detail-${d.id}">
+    <div class="aud-5w-grid">
+      <div class="aud-5w-item" style="grid-column:span 2">
+        <div class="aud-5w-key">¿Quién?</div>
+        <div class="aud-5w-val">${d.quien}</div>
+      </div>
+      <div class="aud-5w-item">
+        <div class="aud-5w-key">Lugar de residencia</div>
+        <div class="aud-5w-val">${d.city}</div>
+      </div>
+      <div class="aud-5w-item">
+        <div class="aud-5w-key">Con quién vive</div>
+        <div class="aud-5w-val">${d.vivienda}</div>
+      </div>
+      <div class="aud-5w-item" style="grid-column:span 2">
+        <div class="aud-5w-key">Intereses y gustos</div>
+        <div class="aud-5w-val">${d.gustos}</div>
+      </div>
+      <div class="aud-5w-item" style="grid-column:span 2">
+        <div class="aud-5w-key">¿Qué consume?</div>
+        <div class="aud-5w-val">${d.que}</div>
+      </div>
+      <div class="aud-5w-item">
+        <div class="aud-5w-key">Forma de consumo</div>
+        <div class="aud-5w-val">${d.como}</div>
+      </div>
+      <div class="aud-5w-item">
+        <div class="aud-5w-key">Dispositivo principal</div>
+        <div class="aud-5w-val">${d.device}</div>
+      </div>
+      <div class="aud-5w-item">
+        <div class="aud-5w-key">¿Cuándo consume?</div>
+        <div class="aud-5w-val">${d.cuando}</div>
+      </div>
+      <div class="aud-5w-item">
+        <div class="aud-5w-key">¿Dónde?</div>
+        <div class="aud-5w-val">${d.donde}</div>
+      </div>
+      <div class="aud-5w-item" style="grid-column:span 2">
+        <div class="aud-5w-key">Principal barrera</div>
+        <div class="aud-5w-val" style="color:rgba(229,9,20,0.8)">${d.painPoint}</div>
+      </div>
+    </div>
+    <div class="aud-detail-section">
+      <div class="aud-detail-label">Perfil del Segmento</div>
+      <div class="aud-detail-text">${d.perfil}</div>
+    </div>
+    <div class="aud-detail-stats">
+      <div class="aud-stat-box">
+        <div class="aud-stat-val" style="color:var(--blue)">${d.consumo}<span style="font-size:9px">min</span></div>
+        <div class="aud-stat-lbl">T. promedio</div>
+      </div>
+      <div class="aud-stat-box">
+        <div class="aud-stat-val" style="color:var(--purple)">${d.freq}x</div>
+        <div class="aud-stat-lbl">Frec/sem</div>
+      </div>
+      <div class="aud-stat-box">
+        <div class="aud-stat-val" style="color:${satColor}">${d.satisf}</div>
+        <div class="aud-stat-lbl">Satisfacción</div>
+      </div>
+      <div class="aud-stat-box">
+        <div class="aud-stat-val" style="color:${idxColor}">${d.index}</div>
+        <div class="aud-stat-lbl">Índice</div>
+      </div>
+    </div>
+  </div>
+</div>`;
+        }).join('');
+
+        grid.insertAdjacentHTML('beforeend', html);
+
+        const existing = document.getElementById('load-more-btn');
+        if (existing) existing.remove();
+        if (start + PAGE_SIZE < data.length) {
+            const remaining = data.length - (start + PAGE_SIZE);
+            const btn = document.createElement('div');
+            btn.id = 'load-more-btn';
+            btn.style.cssText = 'grid-column:1/-1;text-align:center;padding:16px 0;';
+            btn.innerHTML = `<button onclick="loadMoreCards()" style="background:rgba(229,9,20,0.1);border:1px solid rgba(229,9,20,0.3);color:var(--red);padding:10px 28px;border-radius:6px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;">CARGAR MÁS · ${remaining.toLocaleString('es-CO')} restantes</button>`;
+            grid.appendChild(btn);
+        }
+        document.getElementById('row-count').textContent = `${data.length.toLocaleString('es-CO')} registros`;
+    }
+
+    function loadMoreCards() { currentPage++; renderCards(filteredData, true); }
+
+    function toggleDetail(id) {
+        const detail = document.getElementById('detail-' + id);
+        const btn    = document.getElementById('btn-' + id);
+        if (!detail) return;
+        const isOpen = detail.classList.contains('open');
+        detail.classList.toggle('open', !isOpen);
+        btn.classList.toggle('open', !isOpen);
+        btn.querySelector('span:first-child').textContent = isOpen ? 'Ver perfil completo' : 'Ocultar perfil';
+    }
+
+    filteredData = [...audienceData];
+    renderCards(filteredData);
+
+    document.getElementById('search-audience').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        filteredData = audienceData.filter(d =>
+            d.nombre.toLowerCase().includes(q) ||
+            d.profile.toLowerCase().includes(q) ||
+            d.city.toLowerCase().includes(q) ||
+            d.ocupacion.toLowerCase().includes(q) ||
+            d.gustos.toLowerCase().includes(q) ||
+            d.edad.toLowerCase().includes(q) ||
+            d.nse.toLowerCase().includes(q) ||
+            d.vivienda.toLowerCase().includes(q)
+        );
+        renderCards(filteredData);
+    });
+
+    // ══════════════════════════════════
+    //  CHART.JS THEME
+    // ══════════════════════════════════
+    Chart.defaults.color = '#888';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
+    Chart.defaults.font.family = "'Inter', sans-serif";
+
+    const RED    = '#E50914';
+    const RED_T  = 'rgba(229,9,20,0.15)';
+    const GREEN  = '#00d47a';
+    const GREEN_T = 'rgba(0,212,122,0.15)';
+    const BLUE   = '#00b4d8';
+    const ORANGE = '#ff8c00';
+    const PURPLE = '#b388ff';
+    const GOLD   = '#ffd700';
+
+    // ── Radar ────────────────────────────────────────────────────────
+    const _n = audienceData.length;
+    const avgForRadar = [
+        audienceData.reduce((s, d) => s + (d.satisf / 10) * 10, 0) / _n,
+        audienceData.reduce((s, d) => s + d.index, 0) / _n,
+        audienceData.reduce((s, d) => s + d.satisf, 0) / _n,
+        audienceData.reduce((s, d) => s + (d.freq / 9) * 10, 0) / _n,
+        audienceData.reduce((s, d) => s + (d.consumo / 180) * 10, 0) / _n,
+        audienceData.reduce((s, d) => s + (d.index / 10) * 8.5, 0) / _n,
+    ];
+    new Chart(document.getElementById('chart-radar'), {
+        type: 'radar',
+        data: {
+            labels: ['Retención','Engagement','Satisfacción','Frecuencia','Consumo','Lealtad'],
+            datasets: [{
+                label: 'Colombia Promedio',
+                data: avgForRadar,
+                borderColor: RED, backgroundColor: RED_T,
+                pointBackgroundColor: RED, pointBorderColor: '#050505',
+                pointHoverBackgroundColor: '#fff', borderWidth: 2
+            }, {
+                label: 'Benchmark Regional',
+                data: [6.5,6.2,6.8,5.5,6.0,6.3],
+                borderColor: 'rgba(255,255,255,0.2)', backgroundColor: 'rgba(255,255,255,0.03)',
+                pointBackgroundColor: 'rgba(255,255,255,0.4)', borderWidth: 1, borderDash: [4,4]
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: { r: { min:0, max:10, ticks:{ stepSize:2, color:'#555', backdropColor:'transparent', font:{size:9} }, grid:{color:'rgba(255,255,255,0.06)'}, angleLines:{color:'rgba(255,255,255,0.08)'}, pointLabels:{color:'#999',font:{size:10}} } },
+            plugins: { legend: { labels: { font:{size:10}, boxWidth:12 } } }
+        }
+    });
+
+    // ── Doughnut ─────────────────────────────────────────────────────
+    const tier1 = audienceData.filter(d => d.index >= 8).length;
+    const tier2 = audienceData.filter(d => d.index >= 5.5 && d.index < 8).length;
+    const tier3 = audienceData.filter(d => d.index < 5.5).length;
+    new Chart(document.getElementById('chart-doughnut'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Tier 1 (8–10)','Tier 2 (5.5–7.9)','Tier 3 (<5.5)'],
+            datasets: [{ data:[tier1,tier2,tier3], backgroundColor:[GREEN_T,'rgba(255,140,0,0.2)',RED_T], borderColor:[GREEN,ORANGE,RED], borderWidth:2, hoverOffset:8 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, cutout:'65%',
+            plugins: {
+                legend: { position:'bottom', labels:{font:{size:10},boxWidth:10,padding:14} },
+                tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} personas` } }
+            }
+        }
+    });
+
+    // ── Line Chart — evolución por ciudad ────────────────────────────
+    const MAIN_CITIES = ['Bogotá','Medellín','Cali','Barranquilla'];
+    const cityBaseAvg = {};
+    MAIN_CITIES.forEach(city => {
+        const dd = audienceData.filter(d => d.city === city);
+        cityBaseAvg[city] = dd.length ? dd.reduce((s,d)=>s+d.index,0)/dd.length : 5.0;
+    });
+    const makeProgression = (base, id) =>
+        [0,1,2,3,4,5].map(m => parseFloat((base - 0.5 + m*0.1 + sr(id*100+m, 77)*0.2).toFixed(2)));
+
+    new Chart(document.getElementById('chart-line'), {
+        type: 'line',
+        data: {
+            labels: ['Enero','Febrero','Marzo','Abril','Mayo','Junio'],
+            datasets: [
+                { label:'Bogotá',      data: makeProgression(cityBaseAvg['Bogotá'],1),      borderColor:RED,    backgroundColor:RED_T,                        tension:0.4, borderWidth:2, fill:true,  pointRadius:4 },
+                { label:'Medellín',    data: makeProgression(cityBaseAvg['Medellín'],2),    borderColor:BLUE,   backgroundColor:'rgba(0,180,216,0.1)',         tension:0.4, borderWidth:2, fill:true,  pointRadius:4 },
+                { label:'Cali',        data: makeProgression(cityBaseAvg['Cali'],3),        borderColor:ORANGE, backgroundColor:'rgba(255,140,0,0.1)',         tension:0.4, borderWidth:2, fill:false, pointRadius:4 },
+                { label:'Barranquilla',data: makeProgression(cityBaseAvg['Barranquilla'],4),borderColor:PURPLE, backgroundColor:'rgba(179,136,255,0.1)',       tension:0.4, borderWidth:1.5,fill:false,pointRadius:3, borderDash:[4,4] }
+            ]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                y: { min:3, max:7, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
+                x: { ticks:{font:{size:9}}, grid:{display:false} }
+            },
+            plugins: { legend: { labels:{font:{size:10},boxWidth:10} } }
+        }
+    });
+
+    // ── Bar Chart — Top 10 por consumo ───────────────────────────────
+    const sortedTop10 = [...audienceData].sort((a,b) => b.consumo - a.consumo).slice(0,10);
+    new Chart(document.getElementById('chart-bar'), {
+        type: 'bar',
+        data: {
+            labels: sortedTop10.map(d => d.nombre.split(' ')[0] + ' ' + d.nombre.split(' ')[1]),
+            datasets: [{ label:'Consumo (min)', data: sortedTop10.map(d=>d.consumo), backgroundColor: sortedTop10.map((_,i)=>`rgba(229,9,20,${0.9-i*0.05})`), borderColor:RED, borderWidth:0, borderRadius:3 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, indexAxis:'y',
+            scales: {
+                x: { ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
+                y: { ticks:{font:{size:9}}, grid:{display:false} }
+            },
+            plugins: { legend:{display:false} }
+        }
+    });
+
+    // ── Scatter — muestra representativa 200 pts ─────────────────────
+    const scatterSample = audienceData.filter((_,i) => i % 10 === 0);
+    new Chart(document.getElementById('chart-scatter'), {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Personas (muestra 200)',
+                data: scatterSample.map(d => ({ x:d.consumo, y:d.freq, r:d.satisf })),
+                backgroundColor: scatterSample.map(d =>
+                    d.index >= 8 ? 'rgba(0,212,122,0.6)' :
+                    d.index >= 5.5 ? 'rgba(255,140,0,0.6)' :
+                    'rgba(229,9,20,0.6)'),
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+                x: { title:{display:true, text:'Tiempo de Consumo (min)', font:{size:10}, color:'#888'}, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
+                y: { title:{display:true, text:'Frecuencia (x/sem)',      font:{size:10}, color:'#888'}, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} }
+            },
+            plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` Consumo: ${ctx.raw.x}min · Freq: ${ctx.raw.y}x` } } }
+        }
+    });
+
+    // ── Bubble Chart — Matriz Riesgo vs Eficiencia ───────────────────
+    const channels = [
+        {name:'Meta',        risk:3.2, eff:8.4, spend:320, color:BLUE   },
+        {name:'TikTok',      risk:5.8, eff:9.1, spend:280, color:PURPLE },
+        {name:'YouTube',     risk:2.1, eff:7.8, spend:210, color:RED    },
+        {name:'Google Ads',  risk:2.8, eff:8.0, spend:190, color:GOLD   },
+        {name:'Programmatic',risk:6.4, eff:7.2, spend:150, color:ORANGE },
+        {name:'OOH Digital', risk:4.1, eff:6.5, spend:100, color:GREEN  },
+        {name:'Influencers', risk:7.2, eff:7.9, spend:130, color:'#ff69b4'}
+    ];
+    new Chart(document.getElementById('chart-bubble'), {
+        type: 'bubble',
+        data: { datasets: channels.map(c => ({ label:c.name, data:[{x:c.risk,y:c.eff,r:Math.sqrt(c.spend)*0.9}], backgroundColor:c.color+'33', borderColor:c.color, borderWidth:2 })) },
+        options: {
+            responsive:true, maintainAspectRatio:false,
+            scales: {
+                x: { title:{display:true,text:'Riesgo',font:{size:10},color:'#888'}, min:0, max:10, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
+                y: { title:{display:true,text:'Eficiencia ROI',font:{size:10},color:'#888'}, min:0, max:10, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} }
+            },
+            plugins: { legend:{ labels:{font:{size:10},boxWidth:10} } }
+        }
+    });
+
+    // ── Channel table ────────────────────────────────────────────────
+    document.getElementById('channel-table').innerHTML = channels.map(c => `
+  <div class="channel-row">
+    <span class="channel-name" style="color:${c.color}">${c.name}</span>
+    <div class="channel-bar-wrap"><div class="channel-bar" style="width:${c.eff*10}%;background:${c.color}"></div></div>
+    <span style="width:40px;text-align:right;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:${c.color}">${c.eff}</span>
+    <div class="channel-bar-wrap" style="flex:0.5"><div class="channel-bar" style="width:${c.risk*10}%;background:${c.risk>5?RED:ORANGE}"></div></div>
+    <span class="channel-risk" style="color:${c.risk>5?RED:ORANGE}">${c.risk>5?'Alto':c.risk>3?'Medio':'Bajo'}</span>
+    <div style="text-align:right;font-size:12px;color:var(--red);font-weight:600">$${c.spend}M</div>
+  </div>`).join('');
+
+    // ══════════════════════════════════════════════════════════════════
+    //  FUNNEL PROMEDIO GENERAL (con valores absolutos)
+    // ══════════════════════════════════════════════════════════════════
+
+    // Calcular tasas reales desde los datos generados
+    const avgIndex_f = audienceData.reduce((s,d)=>s+d.index,0) / audienceData.length;
+    const avgSatisf_f = audienceData.reduce((s,d)=>s+d.satisf,0) / audienceData.length;
+    const iF = avgIndex_f / 10;
+    const sF = avgSatisf_f / 10;
+
+    const pctAwareness   = Math.round(60 + iF * 28);
+    const pctConsid      = Math.round(pctAwareness  * (0.60 + sF * 0.20));
+    const pctTrial       = Math.round(pctConsid      * (0.55 + iF * 0.18));
+    const pctConversion  = Math.round(pctTrial       * (0.50 + iF * 0.22));
+    const pctRetention   = Math.round(pctConversion  * (0.58 + sF * 0.22));
+    const pctAdvocacy    = Math.round(pctRetention   * (0.38 + iF * 0.28));
+
+    const TOTAL = audienceData.length; // 2000
+    const funnelSteps = [
+        { label:'Población Total', pct:100,          abs:TOTAL,                                         drop:null, color:'#888'  },
+        { label:'Awareness',       pct:pctAwareness,  abs:Math.round(TOTAL*pctAwareness/100),            drop:-(100-pctAwareness),           color:BLUE   },
+        { label:'Consideration',   pct:pctConsid,     abs:Math.round(TOTAL*pctConsid/100),               drop:-(pctAwareness-pctConsid),     color:PURPLE },
+        { label:'Trial / Free',    pct:pctTrial,      abs:Math.round(TOTAL*pctTrial/100),                drop:-(pctConsid-pctTrial),         color:GOLD   },
+        { label:'Conversion',      pct:pctConversion, abs:Math.round(TOTAL*pctConversion/100),           drop:-(pctTrial-pctConversion),     color:ORANGE },
+        { label:'Retención 30d',   pct:pctRetention,  abs:Math.round(TOTAL*pctRetention/100),            drop:-(pctConversion-pctRetention), color:RED    },
+        { label:'Advocacy',        pct:pctAdvocacy,   abs:Math.round(TOTAL*pctAdvocacy/100),             drop:-(pctRetention-pctAdvocacy),   color:GREEN  }
+    ];
+
+    document.getElementById('funnel-container').innerHTML = funnelSteps.map(s => `
+  <div class="funnel-step" style="border-left-color:${s.color}">
+    <div style="width:${Math.max(s.pct*2.2,70)}px;min-width:70px;max-width:220px;height:36px;border-radius:4px;background:${s.color}22;border:1px solid ${s.color}44;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;">
+      <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:${s.color}">${s.pct}%</span>
+    </div>
+    <div style="flex:1;min-width:0">
+      <span class="funnel-label" style="color:${s.color};display:block">${s.label}</span>
+      <span style="font-size:10px;color:var(--text-dim)">${s.abs.toLocaleString('es-CO')} personas</span>
+    </div>
+    ${s.drop !== null
+        ? `<span class="funnel-drop">↓ ${Math.abs(s.drop)}% drop-off</span>`
+        : '<span class="funnel-drop" style="color:var(--text-dim)">Base</span>'}
+  </div>`).join('');
+
+    // ══════════════════════════════════════════════════════════════════
+    //  FUNNEL INDIVIDUAL POR PERSONA
+    //  Cada persona tiene sus propias tasas calculadas desde su index/satisf
+    // ══════════════════════════════════════════════════════════════════
+    function calcFunnel(d) {
+        const iF = d.index  / 10;
+        const sF = d.satisf / 10;
+        // Ruido pequeño determinista para que personas similares no sean idénticas
+        const noise = n => Math.round(sr(d.id, n) * 4 - 2); // ±2 pp
+        const aw = Math.min(100, Math.round(58 + iF*30) + noise(30));
+        const co = Math.min(aw,  Math.round(aw  * (0.58 + sF*0.22)) + noise(31));
+        const tr = Math.min(co,  Math.round(co  * (0.53 + iF*0.20)) + noise(32));
+        const cv = Math.min(tr,  Math.round(tr  * (0.48 + iF*0.24)) + noise(33));
+        const re = Math.min(cv,  Math.round(cv  * (0.56 + sF*0.24)) + noise(34));
+        const ad = Math.min(re,  Math.round(re  * (0.36 + iF*0.30)) + noise(35));
+        return { aw, co, tr, cv, re, ad };
+    }
+
+    let funnelFiltered = [...audienceData];
+    let funnelPage = 0;
+    const FUNNEL_PAGE = 100;
+
+    function renderFunnelTable(data, append = false) {
+        const tbody = document.getElementById('funnel-table-body');
+        if (!append) { tbody.innerHTML = ''; funnelPage = 0; }
+
+        const slice = data.slice(funnelPage * FUNNEL_PAGE, (funnelPage + 1) * FUNNEL_PAGE);
+        slice.forEach(d => {
+            const f = calcFunnel(d);
+            const idxClass = d.index >= 6 ? 'badge-green' : d.index >= 5 ? 'badge-orange' : 'badge-red';
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><div style="font-weight:500;font-size:12px">${d.nombre}</div><div style="font-size:10px;color:var(--text-dim)">${d.ocupacion}</div></td>
+              <td><span class="city-dot">${d.city}</span></td>
+              <td style="color:var(--text-dim);font-size:11px">${d.edadExacta} · ${d.nse}</td>
+              <td style="font-family:'Orbitron',sans-serif;font-size:11px;color:#888">100%</td>
+              <td style="color:${BLUE};font-family:'Orbitron',sans-serif;font-size:11px">${f.aw}%</td>
+              <td style="color:${PURPLE};font-family:'Orbitron',sans-serif;font-size:11px">${f.co}%</td>
+              <td style="color:${GOLD};font-family:'Orbitron',sans-serif;font-size:11px">${f.tr}%</td>
+              <td style="color:${ORANGE};font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700">${f.cv}%</td>
+              <td style="color:${RED};font-family:'Orbitron',sans-serif;font-size:11px">${f.re}%</td>
+              <td style="color:${GREEN};font-family:'Orbitron',sans-serif;font-size:11px">${f.ad}%</td>
+              <td><span class="badge ${idxClass}">${d.index}</span></td>`;
+            tbody.appendChild(tr);
+        });
+
+        const existBtn = document.getElementById('funnel-load-more');
+        if (existBtn) existBtn.remove();
+        if ((funnelPage + 1) * FUNNEL_PAGE < data.length) {
+            const remaining = data.length - (funnelPage + 1) * FUNNEL_PAGE;
+            const tr = document.createElement('tr');
+            tr.id = 'funnel-load-more';
+            tr.innerHTML = `<td colspan="11" style="text-align:center;padding:12px"><button onclick="loadMoreFunnel()" style="background:rgba(229,9,20,0.1);border:1px solid rgba(229,9,20,0.3);color:var(--red);padding:8px 24px;border-radius:6px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;">CARGAR MÁS · ${remaining.toLocaleString('es-CO')} restantes</button></td>`;
+            tbody.appendChild(tr);
+        }
+        document.getElementById('funnel-row-count').textContent = `${data.length.toLocaleString('es-CO')} personas`;
+    }
+
+    function loadMoreFunnel() { funnelPage++; renderFunnelTable(funnelFiltered, true); }
+
+    renderFunnelTable(funnelFiltered);
+
+    document.getElementById('search-funnel').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        funnelFiltered = audienceData.filter(d =>
+            d.nombre.toLowerCase().includes(q) ||
+            d.city.toLowerCase().includes(q) ||
+            d.ocupacion.toLowerCase().includes(q) ||
+            d.nse.toLowerCase().includes(q)
+        );
+        renderFunnelTable(funnelFiltered);
+    });
+
+    // ── Churn Chart ──────────────────────────────────────────────────
+    const weeks = ['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11','S12'];
+    new Chart(document.getElementById('chart-churn'), {
+        type: 'line',
+        data: {
+            labels: weeks,
+            datasets: [
+                { label:'Churn Real (%)',        data:[8.4,7.9,7.6,7.2,6.8,6.5,null,null,null,null,null,null], borderColor:RED,    backgroundColor:RED_T,   tension:0.4, borderWidth:2, fill:true, pointRadius:5, pointBackgroundColor:RED,   spanGaps:false },
+                { label:'Proyección (%)',         data:[null,null,null,null,null,6.5,6.1,5.7,5.2,4.8,4.3,3.9], borderColor:GREEN,  backgroundColor:GREEN_T, tension:0.4, borderWidth:2, fill:true, pointRadius:4, pointBackgroundColor:GREEN, spanGaps:false, borderDash:[6,4] },
+                { label:'Target Estratégico',     data:[7,7,7,7,7,7,5,5,5,4,4,4],                              borderColor:'rgba(255,215,0,0.4)', backgroundColor:'transparent', tension:0, borderWidth:1.5, borderDash:[3,3], pointRadius:0 }
+            ]
+        },
+        options: {
+            responsive:true, maintainAspectRatio:false,
+            scales: {
+                y: { min:0, max:10, ticks:{callback:v=>v+'%',font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
+                x: { ticks:{font:{size:9}}, grid:{display:false} }
+            },
+            plugins: { legend:{ labels:{font:{size:10},boxWidth:10} } }
+        }
+    });
+
+    // ══════════════════════════════════
+    //  TAB NAVIGATION
+    // ══════════════════════════════════
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.dataset.tab;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + target).classList.add('active');
+        });
+    });
+
+    // ══════════════════════════════════
+    //  CLOCK
+    // ══════════════════════════════════
+    function updateClock() {
+        document.getElementById('clock').textContent =
+            new Date().toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ══════════════════════════════════
+    //  INIT — Resumen
+    // ══════════════════════════════════
+    calcKPIs();
+
+    // Géneros top 3 (calculados desde gustos reales de la librería)
+    const genreCount = {};
+    audienceData.forEach(d => {
+        d.gustos.split(',').forEach(g => {
+            const key = g.trim().split(' ')[0];
+            genreCount[key] = (genreCount[key] || 0) + 1;
+        });
+    });
+    const topGenres = Object.entries(genreCount).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    const maxG = topGenres[0][1];
+    document.getElementById('top-genres').innerHTML = topGenres.map(([name, cnt], i) => {
+        const pct = Math.round(cnt / audienceData.length * 100);
+        return `
+  <div style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+      <span>${i+1}. ${name}</span>
+      <span style="font-family:'Orbitron',sans-serif">${pct}%</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" style="width:${pct}%;background:var(--red)"></div>
+    </div>
+  </div>`;
+    }).join('');
+
+    // Target Audience Profile — calculado desde la librería real
+    function renderTargetAudience() {
+        const n = audienceData.length;
+        const avgC = (audienceData.reduce((s,d)=>s+d.consumo,0)/n).toFixed(0);
+        const avgI = (audienceData.reduce((s,d)=>s+d.index,0)/n).toFixed(2);
+        const avgF = (audienceData.reduce((s,d)=>s+d.freq,0)/n).toFixed(1);
+        const avgA = (audienceData.reduce((s,d)=>s+d.edadExacta,0)/n).toFixed(0);
+
+        const cityCount = {};
+        audienceData.forEach(d => { cityCount[d.city] = (cityCount[d.city]||0)+1; });
+        const topCities = Object.entries(cityCount).sort((a,b)=>b[1]-a[1]).slice(0,5)
+            .map(([city,cnt]) => `${city} (${(cnt/n*100).toFixed(0)}%)`).join(' · ');
+
+        const devCount = {};
+        audienceData.forEach(d => {
+            d.device.split('/').forEach(dv => { const k=dv.trim(); devCount[k]=(devCount[k]||0)+1; });
+        });
+        const topDevices = Object.entries(devCount).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([d])=>d).join(', ');
+
+        const nseCount = {};
+        audienceData.forEach(d => { nseCount[d.nse]=(nseCount[d.nse]||0)+1; });
+        const dominantNSE = Object.entries(nseCount).sort((a,b)=>b[1]-a[1])[0][0];
+
+        document.getElementById('target-perfil').textContent =
+            `${n.toLocaleString('es-CO')} perfiles únicos · Edad promedio ${avgA} años · NSE dominante: ${dominantNSE} · Urbanos Colombia`;
+        document.getElementById('target-contenido').textContent =
+            `Contenido local colombiano y drama son los géneros más demandados. El top de consumo llega a 180 min/sesión. Promedio de engagement index: ${avgI}/10. Consumo promedio: ${avgC} min/sesión.`;
+        document.getElementById('target-metodo').textContent =
+            `Consumo fragmentado y multitarea. Dispositivos más usados: ${topDevices}. Frecuencia promedio: ${avgF}x/sem. Alto uso offline en segmentos en tránsito.`;
+        document.getElementById('target-horario').textContent = '21:00–01:00 L–V · Fines de semana 14:00–23:00';
+        document.getElementById('target-zona').textContent = topCities;
+    }
+    renderTargetAudience();
+
+    lucide.createIcons();
+    </script>
+</body>
+</html>
