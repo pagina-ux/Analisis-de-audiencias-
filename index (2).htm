@@ -1021,6 +1021,55 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
+
+        /* ─── COMMAND CENTER ─── */
+        .cc-matrix-wrap { border-radius:10px; border:1px solid var(--glass-border); overflow:hidden; }
+        .cc-matrix { width:100%; border-collapse:collapse; table-layout:auto; }
+        .cc-matrix thead th { padding:10px 6px; font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.08); text-align:center; white-space:nowrap; }
+        .cc-matrix thead th:first-child { width:36px; border-right:1px solid rgba(255,255,255,0.06); }
+        .cc-matrix thead th.col-stage { text-align:left; }
+        .cc-matrix thead th.col-total { color:var(--text); background:rgba(229,9,20,0.06); }
+        .cc-matrix tbody tr.data-row { border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.2s; }
+        .cc-matrix tbody tr.data-row:hover > td { background:rgba(255,255,255,0.02); }
+        .cc-matrix tbody tr.data-row.expanded > td { background:rgba(229,9,20,0.03); }
+        .cc-matrix td { padding:10px 6px; font-size:11px; text-align:center; vertical-align:middle; white-space:nowrap; }
+        .cc-matrix td:first-child { width:36px; padding:0; cursor:pointer; border-right:1px solid rgba(255,255,255,0.06); }
+        .cc-matrix td.td-stage { text-align:left; font-weight:600; padding-left:10px; }
+        .cc-matrix td.td-total { font-family:'Orbitron',sans-serif; font-weight:700; font-size:13px; background:rgba(229,9,20,0.04); border-left:1px solid rgba(229,9,20,0.15); }
+        /* Detail row — inline, right after its data row */
+        .cc-detail-row { display:none; }
+        .cc-detail-row.open { display:table-row; }
+        .cc-detail-row td.detail-cell { padding:0 !important; white-space:normal; text-align:left; border-bottom:1px solid rgba(255,255,255,0.06); }
+        .cc-detail-inner { padding:18px 20px 22px; display:grid; grid-template-columns:1fr 1fr; gap:14px; box-sizing:border-box; width:100%; background:rgba(0,0,0,0.3); }
+        .cc-pct-cell { display:inline-flex; align-items:center; justify-content:center; flex-direction:column; gap:5px; }
+        .cc-pct-val { font-family:'Orbitron',sans-serif; font-size:11px; font-weight:700; }
+        .cc-pct-bar { width:40px; height:3px; background:rgba(255,255,255,0.07); border-radius:2px; overflow:hidden; }
+        .cc-pct-fill { height:100%; border-radius:2px; }
+        .expand-btn-cc { width:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--text-dimmer); transition:color 0.2s, transform 0.25s; font-size:12px; user-select:none; padding:14px 0; }
+        .expand-btn-cc.open { color:var(--red); transform:rotate(90deg); }
+        .cc-next-stage { grid-column:span 2; background:linear-gradient(135deg,rgba(229,9,20,0.07),rgba(0,0,0,0.2)); border:1px solid rgba(229,9,20,0.25); border-radius:8px; padding:16px 18px; }
+        .cc-next-stage-title { font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:10px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+        .cc-next-stage-title::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(229,9,20,0.3),transparent); min-width:20px; }
+        .cc-next-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:4px; }
+        .cc-next-step { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:6px; padding:12px 14px; }
+        .cc-next-step-num { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:700; line-height:1; margin-bottom:6px; }
+        .cc-next-step-text { font-size:11px; color:var(--text-dim); line-height:1.55; white-space:normal; }
+        .cc-detail-box { background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:14px; }
+        .cc-detail-box.wide { grid-column:span 2; background:rgba(229,9,20,0.04); border-color:rgba(229,9,20,0.2); }
+        .cc-detail-box.span2 { grid-column:span 2; }
+        .cc-detail-label { font-family:'Orbitron',sans-serif; font-size:8px; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
+        .cc-detail-text { font-size:11px; color:var(--text-dim); line-height:1.65; white-space:normal; }
+        .cc-summary-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
+        .cc-strip-card { background:var(--glass); border:1px solid var(--glass-border); border-radius:8px; padding:14px 16px; }
+        .cc-strip-label { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--text-dim); font-family:'Orbitron',sans-serif; margin-bottom:4px; }
+        .cc-strip-val { font-family:'Orbitron',sans-serif; font-size:22px; font-weight:700; }
+        .cc-strip-sub { font-size:10px; color:var(--text-dimmer); margin-top:3px; }
+        .cc-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:14px; }
+        .cc-legend-item { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--text-dim); }
+        .cc-legend-dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+        .cc-stage-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px 4px 7px; border-radius:20px; font-size:11px; font-weight:600; border:1px solid; }
+        .cc-stage-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
     </style>
 </head>
 
@@ -1044,7 +1093,8 @@
     </header>
 
     <div class="tabs-container">
-        <button class="tab-btn active" data-tab="resumen"><i data-lucide="layout-dashboard"></i>Resumen</button>
+        <button class="tab-btn active" data-tab="command"><i data-lucide="crosshair"></i>Command Center</button>
+        <button class="tab-btn" data-tab="resumen"><i data-lucide="layout-dashboard"></i>Resumen</button>
         <button class="tab-btn" data-tab="audiencias"><i data-lucide="users"></i>Audiencias</button>
         <button class="tab-btn" data-tab="graficas"><i data-lucide="bar-chart-2"></i>Gráficas</button>
         <button class="tab-btn" data-tab="publicidad"><i data-lucide="megaphone"></i>Publicidad</button>
@@ -1053,8 +1103,319 @@
 
     <main>
 
+        <!-- ════════════ TAB: COMMAND CENTER ════════════ -->
+        <div class="tab-panel active" id="tab-command">
+
+            <!-- Summary strip -->
+            <div class="cc-summary-strip">
+                <div class="cc-strip-card">
+                    <div class="cc-strip-label">Mercado Potencial</div>
+                    <div class="cc-strip-val" style="color:var(--text)">2,000</div>
+                    <div class="cc-strip-sub">perfiles identificados</div>
+                </div>
+                <div class="cc-strip-card">
+                    <div class="cc-strip-label">Tasa de Conversión</div>
+                    <div class="cc-strip-val" style="color:var(--green)" id="cc-conv-rate">—</div>
+                    <div class="cc-strip-sub">potencial → acción</div>
+                </div>
+                <div class="cc-strip-card">
+                    <div class="cc-strip-label">Engagement Activo</div>
+                    <div class="cc-strip-val" style="color:var(--blue)" id="cc-eng-rate">—</div>
+                    <div class="cc-strip-sub">usuarios recurrentes</div>
+                </div>
+                <div class="cc-strip-card">
+                    <div class="cc-strip-label">Lealtad / Advocacy</div>
+                    <div class="cc-strip-val" style="color:var(--gold)" id="cc-loy-rate">—</div>
+                    <div class="cc-strip-sub">promotores netos</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="margin-bottom:16px;">
+                    <div>
+                        <span class="card-title">Audience Matrix · Funnel de Conversión</span>
+                        <div style="font-size:10px;color:var(--text-dim);margin-top:3px;">Distribución porcentual por etapa · cada fila suma 100%</div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:10px;color:var(--text-dim)">Base: 2,000 perfiles</span>
+                    </div>
+                </div>
+
+                <div class="cc-legend">
+                    <div class="cc-legend-item"><div class="cc-legend-dot" style="background:#607d8b"></div>Unknown External</div>
+                    <div class="cc-legend-item"><div class="cc-legend-dot" style="background:var(--blue)"></div>Known External</div>
+                    <div class="cc-legend-item"><div class="cc-legend-dot" style="background:var(--purple)"></div>Unknown Internal</div>
+                    <div class="cc-legend-item"><div class="cc-legend-dot" style="background:var(--green)"></div>Known Internal</div>
+                    <div class="cc-legend-item"><div class="cc-legend-dot" style="background:var(--red)"></div>Total</div>
+                </div>
+
+                <div class="cc-matrix-wrap">
+                    <table class="cc-matrix">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th class="col-stage">Etapa del Funnel</th>
+                                <th style="color:#607d8b">Unknown<br>External</th>
+                                <th style="color:var(--blue)">Known<br>External</th>
+                                <th style="color:var(--purple)">Unknown<br>Internal</th>
+                                <th style="color:var(--green)">Known<br>Internal</th>
+                                <th class="col-total">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cc-matrix-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── Canal Distribution Table ── -->
+            <div class="card" style="margin-top:20px;">
+                <div class="card-header" style="margin-bottom:16px;">
+                    <div>
+                        <span class="card-title">Distribución de Canales por Etapa del Funnel</span>
+                        <div style="font-size:10px;color:var(--text-dim);margin-top:3px;">Peso porcentual de cada canal de comunicación según etapa · cada fila suma 100%</div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
+                    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dim)"><div style="width:8px;height:8px;border-radius:2px;background:#00b4d8;flex-shrink:0"></div>Web</div>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dim)"><div style="width:8px;height:8px;border-radius:2px;background:#b388ff;flex-shrink:0"></div>Email</div>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dim)"><div style="width:8px;height:8px;border-radius:2px;background:#00d47a;flex-shrink:0"></div>WhatsApp</div>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dim)"><div style="width:8px;height:8px;border-radius:2px;background:#E50914;flex-shrink:0"></div>Paid Media Google</div>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dim)"><div style="width:8px;height:8px;border-radius:2px;background:#ffd700;flex-shrink:0"></div>Paid Media Meta</div>
+                </div>
+
+                <div style="overflow-x:auto;">
+                <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                    <thead>
+                        <tr>
+                            <th style="position:sticky;top:0;background:#0d0d0d;padding:10px 14px;text-align:left;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);border-bottom:1px solid rgba(229,9,20,0.3);white-space:nowrap;">Etapa del Funnel</th>
+                            <th style="position:sticky;top:0;background:#0d0d0d;padding:10px 14px;text-align:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#00b4d8;border-bottom:1px solid rgba(229,9,20,0.3);white-space:nowrap;">Web</th>
+                            <th style="position:sticky;top:0;background:#0d0d0d;padding:10px 14px;text-align:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#b388ff;border-bottom:1px solid rgba(229,9,20,0.3);white-space:nowrap;">Email</th>
+                            <th style="position:sticky;top:0;background:#0d0d0d;padding:10px 14px;text-align:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#00d47a;border-bottom:1px solid rgba(229,9,20,0.3);white-space:nowrap;">WhatsApp</th>
+                            <th style="position:sticky;top:0;background:#0d0d0d;padding:10px 14px;text-align:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#E50914;border-bottom:1px solid rgba(229,9,20,0.3);white-space:nowrap;">Paid Media<br>Google</th>
+                            <th style="position:sticky;top:0;background:#0d0d0d;padding:10px 14px;text-align:center;font-family:'Orbitron',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#ffd700;border-bottom:1px solid rgba(229,9,20,0.3);white-space:nowrap;">Paid Media<br>Meta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Awareness: dominado por paid media para generar alcance masivo -->
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;" onmouseover="this.style.background='rgba(229,9,20,0.04)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding:11px 14px;">
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <span style="font-size:15px;">👁</span>
+                                    <div>
+                                        <div style="font-size:12px;font-weight:600;color:#00b4d8;">Awareness</div>
+                                        <div style="font-size:9px;color:var(--text-dimmer);margin-top:1px;">Etapa 1 · Alcance masivo</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00b4d8;">15%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:15%;height:100%;background:#00b4d8;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#b388ff;">5%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:5%;height:100%;background:#b388ff;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00d47a;">5%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:5%;height:100%;background:#00d47a;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#E50914;">40%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:40%;height:100%;background:#E50914;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#ffd700;">35%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:35%;height:100%;background:#ffd700;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Interest: paid media sigue fuerte, web crece con SEO/blog -->
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;" onmouseover="this.style.background='rgba(229,9,20,0.04)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding:11px 14px;">
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <span style="font-size:15px;">🔍</span>
+                                    <div>
+                                        <div style="font-size:12px;font-weight:600;color:#b388ff;">Interest</div>
+                                        <div style="font-size:9px;color:var(--text-dimmer);margin-top:1px;">Etapa 2 · Consideración activa</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00b4d8;">25%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:25%;height:100%;background:#00b4d8;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#b388ff;">15%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:15%;height:100%;background:#b388ff;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00d47a;">10%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:10%;height:100%;background:#00d47a;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#E50914;">28%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:28%;height:100%;background:#E50914;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#ffd700;">22%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:22%;height:100%;background:#ffd700;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Intention: email y web lideran, paid media retargeting -->
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;" onmouseover="this.style.background='rgba(229,9,20,0.04)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding:11px 14px;">
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <span style="font-size:15px;">🎯</span>
+                                    <div>
+                                        <div style="font-size:12px;font-weight:600;color:#ffd700;">Intention</div>
+                                        <div style="font-size:9px;color:var(--text-dimmer);margin-top:1px;">Etapa 3 · Decisión de compra</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00b4d8;">20%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:20%;height:100%;background:#00b4d8;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#b388ff;">30%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:30%;height:100%;background:#b388ff;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00d47a;">15%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:15%;height:100%;background:#00d47a;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#E50914;">20%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:20%;height:100%;background:#E50914;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#ffd700;">15%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:15%;height:100%;background:#ffd700;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Action: canales directos dominan — email y WhatsApp -->
+                        <tr style="border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;" onmouseover="this.style.background='rgba(229,9,20,0.04)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding:11px 14px;">
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <span style="font-size:15px;">✅</span>
+                                    <div>
+                                        <div style="font-size:12px;font-weight:600;color:#ff8c00;">Action</div>
+                                        <div style="font-size:9px;color:var(--text-dimmer);margin-top:1px;">Etapa 4 · Conversión</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00b4d8;">15%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:15%;height:100%;background:#00b4d8;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#b388ff;">35%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:35%;height:100%;background:#b388ff;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00d47a;">30%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:30%;height:100%;background:#00d47a;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#E50914;">12%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:12%;height:100%;background:#E50914;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#ffd700;">8%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:8%;height:100%;background:#ffd700;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Engagement: email y WhatsApp dominan, mínimo paid media -->
+                        <tr style="border-bottom:none;transition:background 0.15s;" onmouseover="this.style.background='rgba(229,9,20,0.04)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding:11px 14px;">
+                                <div style="display:flex;align-items:center;gap:10px;">
+                                    <span style="font-size:15px;">🔥</span>
+                                    <div>
+                                        <div style="font-size:12px;font-weight:600;color:#E50914;">Engagement</div>
+                                        <div style="font-size:9px;color:var(--text-dimmer);margin-top:1px;">Etapa 5 · Retención activa</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00b4d8;">10%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:10%;height:100%;background:#00b4d8;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#b388ff;">40%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:40%;height:100%;background:#b388ff;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#00d47a;">38%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:38%;height:100%;background:#00d47a;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#E50914;">7%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:7%;height:100%;background:#E50914;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                            <td style="padding:11px 14px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:5px;">
+                                    <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:#ffd700;">5%</span>
+                                    <div style="width:60px;height:4px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;"><div style="width:5%;height:100%;background:#ffd700;border-radius:2px;"></div></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+        </div>
+
         <!-- ════════════ TAB: RESUMEN ════════════ -->
-        <div class="tab-panel active" id="tab-resumen">
+        <div class="tab-panel" id="tab-resumen">
 
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -1362,6 +1723,8 @@
                         <tbody id="funnel-table-body"></tbody>
                     </table>
                 </div>
+                <div id="cc-panels-container"></div>
+                </div><!-- /cc-outer-wrap -->
             </div>
 
             <div class="card" style="margin-top:16px;padding:16px;">
@@ -1415,22 +1778,14 @@
     <script>
     // ══════════════════════════════════════════════════════════════════
     //  GENERADOR DE 2,000 PERFILES ÚNICOS · NETFLIX COLOMBIA
-    //  Cada persona se construye combinando variables independientes.
-    //  No hay arquetipos fijos que se repitan — cada campo se selecciona
-    //  de sus propios catálogos, produciendo individuos distintos.
     // ══════════════════════════════════════════════════════════════════
 
-    // ── Utilidades de aleatoriedad determinista ──────────────────────
-    // Pseudo-RNG de bajo costo basado en seno (sin dependencias externas).
-    // Dado el mismo id + salt siempre devuelve el mismo valor → reproducible.
     function sr(id, salt) {
         const x = Math.sin(id * 127.1 + salt * 311.7) * 43758.5453;
-        return x - Math.floor(x); // [0, 1)
+        return x - Math.floor(x);
     }
     function pick(id, salt, arr) { return arr[Math.floor(sr(id, salt) * arr.length)]; }
-    function rng(id, salt, min, max, dec = 1) {
-        return parseFloat((min + sr(id, salt) * (max - min)).toFixed(dec));
-    }
+    function rng(id, salt, min, max) { return parseFloat((min + sr(id, salt) * (max - min)).toFixed(1)); }
     function pickW(id, salt, items, weights) {
         const total = weights.reduce((a, b) => a + b, 0);
         let r = sr(id, salt) * total;
@@ -1438,138 +1793,47 @@
         return items[items.length - 1];
     }
 
-    // ── Catálogos de variables ────────────────────────────────────────
     const NOMBRES_M = ['Andrés','Carlos','Diego','Felipe','Javier','Sebastián','Mateo','Daniel','Juan','Camilo','Alejandro','Miguel','Nicolás','Santiago','Esteban','Julián','Ricardo','Gustavo','Roberto','David','Iván','Mauricio','Fabio','Oscar','Héctor','Mario','Jorge','Pablo','Tomás','Sergio'];
     const NOMBRES_F = ['Laura','Valentina','Sofía','Daniela','Camila','Isabella','María','Natalia','Alejandra','Paola','Andrea','Claudia','Marcela','Juliana','Carolina','Gabriela','Fernanda','Verónica','Manuela','Diana','Ximena','Catalina','Lucía','Adriana','Patricia','Mónica','Lorena','Sandra','Tatiana','Viviana'];
     const APELLIDOS = ['García','Martínez','López','Rodríguez','González','Hernández','Pérez','Sánchez','Ramírez','Torres','Flores','Rivera','Gómez','Díaz','Vargas','Reyes','Morales','Jiménez','Castro','Ruiz','Ortiz','Núñez','Medina','Ramos','Acosta','Arias','Bermúdez','Cardona','Delgado','Escobar','Figueroa','Gutiérrez','Herrera','Infante','Jaramillo','Leal','Montoya','Nieto','Ospina','Quintero','Salazar','Trujillo','Uribe','Valencia','Zamora'];
-
     const CIUDADES = ['Bogotá','Medellín','Cali','Barranquilla','Bucaramanga','Cartagena','Manizales','Pereira','Ibagué','Cúcuta','Santa Marta','Villavicencio','Pasto','Montería','Armenia'];
     const CIUDAD_W = [35,25,20,12,8,6,4,4,3,3,3,2,2,2,2];
-
     const EDADES_RANGO = [
-        {label:'16–17', min:16, max:17},
-        {label:'18–24', min:18, max:24},
-        {label:'25–34', min:25, max:34},
-        {label:'35–44', min:35, max:44},
-        {label:'45–54', min:45, max:54},
-        {label:'55–70', min:55, max:70},
-        {label:'71–80', min:71, max:80},
+        {label:'16–17',min:16,max:17},{label:'18–24',min:18,max:24},{label:'25–34',min:25,max:34},
+        {label:'35–44',min:35,max:44},{label:'45–54',min:45,max:54},{label:'55–70',min:55,max:70},{label:'71–80',min:71,max:80}
     ];
     const EDAD_W = [3,22,28,22,13,9,3];
-
     const NSE = ['Bajo','Bajo-Medio','Medio','Medio-Alto','Alto'];
     const NSE_W = [10,20,35,25,10];
-
-    const OCUPACIONES = [
-        'Estudiante universitario','Estudiante técnico','Recién egresado',
-        'Profesional independiente','Empleado administrativo','Ejecutivo de empresa',
-        'Docente','Médico / Personal de salud','Ingeniero','Abogado',
-        'Comerciante','Emprendedor','Ama de casa','Jubilado','Militar / Policía',
-        'Diseñador / Creativo','Periodista','Desarrollador de software','Conductor / Repartidor',
-        'Operario / Técnico','Artista / Músico','Influencer / Creador de contenido',
-        'Contador / Financiero','Arquitecto','Chef / Gastronómico'
-    ];
-
-    const CONVIVENCIA = [
-        'Con padres y hermanos','Con pareja sin hijos','Con pareja e hijos pequeños',
-        'Con pareja e hijos adolescentes','Solo/a','Con compañeros de cuarto',
-        'Con familia extensa','Con padres (adulto mayor)','En residencia universitaria'
-    ];
+    const OCUPACIONES = ['Estudiante universitario','Estudiante técnico','Recién egresado','Profesional independiente','Empleado administrativo','Ejecutivo de empresa','Docente','Médico / Personal de salud','Ingeniero','Abogado','Comerciante','Emprendedor','Ama de casa','Jubilado','Militar / Policía','Diseñador / Creativo','Periodista','Desarrollador de software','Conductor / Repartidor','Operario / Técnico','Artista / Músico','Influencer / Creador de contenido','Contador / Financiero','Arquitecto','Chef / Gastronómico'];
+    const CONVIVENCIA = ['Con padres y hermanos','Con pareja sin hijos','Con pareja e hijos pequeños','Con pareja e hijos adolescentes','Solo/a','Con compañeros de cuarto','Con familia extensa','Con padres (adulto mayor)','En residencia universitaria'];
     const CONVIVENCIA_W = [18,16,14,12,10,10,8,7,5];
-
     const DISPOSITIVOS = ['Smartphone','Smart TV','Laptop','Tablet','Smart TV + Smartphone','Laptop + Smartphone','Smart TV + Tablet','Monitor PC'];
     const DISPOSITIVO_W = [30,22,16,8,10,7,4,3];
-
     const GENEROS_CONTENIDO = [
-        ['Drama','Thriller','Series de crimen'],
-        ['Comedia','Reality show','Entretenimiento ligero'],
-        ['Acción','Aventura','Superhéroes'],
-        ['Ciencia ficción','Fantasía','Animé'],
-        ['Documentales','Contenido educativo','Naturaleza'],
-        ['Contenido colombiano','Novelas latinoamericanas','Cultura local'],
-        ['K-drama','Contenido asiático','Animé'],
-        ['Romance','Drama familiar','Comedias románticas'],
-        ['Thriller político','Espionaje','Crimen organizado'],
-        ['Deportes','Biopics atléticos','Documentales deportivos'],
-        ['Terror','Suspenso psicológico','Misterio'],
-        ['Comedia adulta','Stand-up','Humor negro'],
-        ['Cine de autor','Películas independientes','Arte y cultura'],
-        ['Infantil y familiar','Animación','Aventura familiar'],
+        ['Drama','Thriller','Series de crimen'],['Comedia','Reality show','Entretenimiento ligero'],
+        ['Acción','Aventura','Superhéroes'],['Ciencia ficción','Fantasía','Animé'],
+        ['Documentales','Contenido educativo','Naturaleza'],['Contenido colombiano','Novelas latinoamericanas','Cultura local'],
+        ['K-drama','Contenido asiático','Animé'],['Romance','Drama familiar','Comedias románticas'],
+        ['Thriller político','Espionaje','Crimen organizado'],['Deportes','Biopics atléticos','Documentales deportivos'],
+        ['Terror','Suspenso psicológico','Misterio'],['Comedia adulta','Stand-up','Humor negro'],
+        ['Cine de autor','Películas independientes','Arte y cultura'],['Infantil y familiar','Animación','Aventura familiar'],
         ['Historia y política','Docudrama','Biopics históricos']
     ];
-    const GENERO_W = [12,10,10,8,8,9,6,8,7,5,5,4,3,4,3];
-
-    const FORMAS_CONSUMO = [
-        'Consumo activo con plena atención','Consumo multitarea (mientras trabaja o estudia)',
-        'Binge-watching en sesiones largas','Consumo fragmentado en pausas cortas',
-        'Background viewing (ruido de fondo)','Consumo en tránsito (transporte público)',
-        'Consumo social con pareja o amigos','Consumo nocturno de descompresión',
-        'Consumo en descansos laborales','Maratón de fin de semana'
-    ];
-
-    const HORARIOS = [
-        '06:00–08:00 (mañana temprana)','08:00–12:00 (mañana)','12:00–14:00 (mediodía)',
-        '14:00–17:00 (tarde)','17:00–19:00 (tarde-noche)','19:00–21:00 (prime time)',
-        '21:00–23:00 (noche)','23:00–01:00 (noche tardía)','01:00–04:00 (madrugada)',
-        'Fines de semana todo el día','Variable sin patrón fijo'
-    ];
+    const FORMAS_CONSUMO = ['Consumo activo con plena atención','Consumo multitarea (mientras trabaja o estudia)','Binge-watching en sesiones largas','Consumo fragmentado en pausas cortas','Background viewing (ruido de fondo)','Consumo en tránsito (transporte público)','Consumo social con pareja o amigos','Consumo nocturno de descompresión','Consumo en descansos laborales','Maratón de fin de semana'];
+    const HORARIOS = ['06:00–08:00 (mañana temprana)','08:00–12:00 (mañana)','12:00–14:00 (mediodía)','14:00–17:00 (tarde)','17:00–19:00 (tarde-noche)','19:00–21:00 (prime time)','21:00–23:00 (noche)','23:00–01:00 (noche tardía)','01:00–04:00 (madrugada)','Fines de semana todo el día','Variable sin patrón fijo'];
     const HORARIO_W = [3,5,6,7,8,12,15,14,5,15,10];
+    const LUGARES_CONSUMO = ['Sala de casa','Habitación propia','Cocina / comedor','Transporte público','Oficina / lugar de trabajo','Cafetería o restaurante','Cuarto universitario','Casa de familia (visita)','Hotel / viaje de negocios','Espacio de coworking'];
+    const PAIN_POINTS = ['Falta de contenido colombiano relevante','Interfaz difícil de navegar','Precio percibido como alto','Catálogo repetitivo — pocas novedades','Algoritmo de recomendación poco acertado','Falta de contenido de nicho (animé, cine de autor)','Conexión a internet inestable afecta la experiencia','Cuenta compartida genera conflictos de perfil','Falta de contenido familiar adecuado','Exceso de contenido en inglés sin doblaje de calidad','Subtítulos en español deficientes','Falta de contenido deportivo en vivo','Dificultad para retomar series pausadas','Contenido infantil limitado para menores de 5 años','Publicidad excesiva en plan básico'];
+    const MOTIVACIONES = ['Entretenimiento y evasión del estrés cotidiano','Conexión con pareja o familia al ver juntos','Consumo de contenido de calidad que no hay en TV abierta','Aprendizaje y cultura a través de documentales','Seguir series específicas de alto interés','Ocio nocturno como rutina de descanso','Descubrimiento de nuevas historias y culturas','Maratonear series completas en poco tiempo','Acceso a contenido colombiano y latinoamericano','Alternativa económica al cine','Consumo en tránsito para aprovechar el tiempo','Hábito establecido difícil de cambiar'];
+    const SATISFACCIONES = { 'Bajo':[3.5,5.5], 'Bajo-Medio':[4.0,6.0], 'Medio':[4.5,6.5], 'Medio-Alto':[5.0,7.5], 'Alto':[5.5,8.5] };
 
-    const LUGARES_CONSUMO = [
-        'Sala de casa','Habitación propia','Cocina / comedor','Transporte público',
-        'Oficina / lugar de trabajo','Cafetería o restaurante','Cuarto universitario',
-        'Casa de familia (visita)','Hotel / viaje de negocios','Espacio de coworking'
-    ];
-
-    const SATISFACCIONES = {
-        'Bajo': [3.5, 5.5],
-        'Bajo-Medio': [4.0, 6.0],
-        'Medio': [4.5, 6.5],
-        'Medio-Alto': [5.0, 7.5],
-        'Alto': [5.5, 8.5]
-    };
-
-    const PAIN_POINTS = [
-        'Falta de contenido colombiano relevante',
-        'Interfaz difícil de navegar',
-        'Precio percibido como alto',
-        'Catálogo repetitivo — pocas novedades',
-        'Algoritmo de recomendación poco acertado',
-        'Falta de contenido de nicho (animé, cine de autor)',
-        'Conexión a internet inestable afecta la experiencia',
-        'Cuenta compartida genera conflictos de perfil',
-        'Falta de contenido familiar adecuado',
-        'Exceso de contenido en inglés sin doblaje de calidad',
-        'Subtítulos en español deficientes',
-        'Falta de contenido deportivo en vivo',
-        'Dificultad para retomar series pausadas',
-        'Contenido infantil limitado para menores de 5 años',
-        'Publicidad excesiva en plan básico'
-    ];
-
-    const MOTIVACIONES = [
-        'Entretenimiento y evasión del estrés cotidiano',
-        'Conexión con pareja o familia al ver juntos',
-        'Consumo de contenido de calidad que no hay en TV abierta',
-        'Aprendizaje y cultura a través de documentales',
-        'Seguir series específicas de alto interés',
-        'Ocio nocturno como rutina de descanso',
-        'Descubrimiento de nuevas historias y culturas',
-        'Maratonear series completas en poco tiempo',
-        'Acceso a contenido colombiano y latinoamericano',
-        'Alternativa económica al cine',
-        'Consumo en tránsito para aprovechar el tiempo',
-        'Hábito establecido difícil de cambiar'
-    ];
-
-    // ── Generador principal ──────────────────────────────────────────
     function generarPersona(id) {
         const genero = sr(id, 0) < 0.52 ? 'M' : 'F';
         const nombre = genero === 'M' ? pick(id, 1, NOMBRES_M) : pick(id, 1, NOMBRES_F);
         const apellido1 = pick(id, 2, APELLIDOS);
         const apellido2 = pick(id, 3, APELLIDOS);
         const nombreCompleto = `${nombre} ${apellido1} ${apellido2}`;
-
         const ciudad = pickW(id, 4, CIUDADES, CIUDAD_W);
         const edadRango = pickW(id, 5, EDADES_RANGO, EDAD_W);
         const edadExacta = Math.floor(edadRango.min + sr(id, 6) * (edadRango.max - edadRango.min + 1));
@@ -1577,79 +1841,35 @@
         const ocupacion = pick(id, 8, OCUPACIONES);
         const convivencia = pickW(id, 9, CONVIVENCIA, CONVIVENCIA_W);
         const dispositivo = pickW(id, 10, DISPOSITIVOS, DISPOSITIVO_W);
-        const generosIdx = Math.floor(sr(id, 11) * GENEROS_CONTENIDO.length);
-        const generosArr = GENEROS_CONTENIDO[generosIdx];
+        const generosArr = GENEROS_CONTENIDO[Math.floor(sr(id, 11) * GENEROS_CONTENIDO.length)];
         const gustos = generosArr.join(', ');
         const formaConsumo = pick(id, 12, FORMAS_CONSUMO);
         const horario = pickW(id, 13, HORARIOS, HORARIO_W);
         const lugar = pick(id, 14, LUGARES_CONSUMO);
         const painPoint = pick(id, 15, PAIN_POINTS);
         const motivacion = pick(id, 16, MOTIVACIONES);
-
-        // Métricas numéricas — influenciadas por edad, NSE y género de contenido
         const nseIdx = NSE.indexOf(nse);
         const edadFactor = edadExacta < 25 ? 0.9 : edadExacta < 45 ? 1.0 : edadExacta < 60 ? 0.95 : 0.8;
-        const nseFactor = 0.8 + nseIdx * 0.08;
-
         const satisfRange = SATISFACCIONES[nse];
         const satisfBase = satisfRange[0] + sr(id, 17) * (satisfRange[1] - satisfRange[0]);
         const satisf = parseFloat((satisfBase * edadFactor).toFixed(1));
-
-        // Consumo: afectado por forma de consumo y dispositivo
-        const consumoBase = dispositivo.includes('Smart TV') ? rng(id, 18, 50, 140) :
-                            dispositivo === 'Smartphone' ? rng(id, 18, 25, 80) :
-                            rng(id, 18, 35, 110);
+        const consumoBase = dispositivo.includes('Smart TV') ? rng(id, 18, 50, 140) : dispositivo === 'Smartphone' ? rng(id, 18, 25, 80) : rng(id, 18, 35, 110);
         const consumo = Math.round(consumoBase * (0.85 + sr(id, 19) * 0.3));
-
-        // Frecuencia: afectada por ocupación y convivencia
-        const freqBase = ocupacion.includes('Jubilado') || convivencia.includes('Solo') ? rng(id, 20, 3, 7) :
-                         ocupacion.includes('Estudiante') ? rng(id, 20, 2.5, 6) :
-                         rng(id, 20, 1.0, 5.5);
+        const freqBase = ocupacion.includes('Jubilado') || convivencia.includes('Solo') ? rng(id, 20, 3, 7) : ocupacion.includes('Estudiante') ? rng(id, 20, 2.5, 6) : rng(id, 20, 1.0, 5.5);
         const freq = parseFloat(freqBase.toFixed(1));
-
-        // Índice: combinación ponderada de satisf, freq y consumo normalizados
         const indexRaw = (satisf / 10) * 4.5 + (freq / 9) * 3.0 + (consumo / 180) * 2.5 + sr(id, 21) * 0.5;
         const index = parseFloat(Math.min(10, Math.max(1, indexRaw)).toFixed(2));
-
-        // Perfil narrativo generado por combinación de variables
         const pronombre = genero === 'M' ? 'Hombre' : 'Mujer';
-        const perfil = `${pronombre} de ${edadExacta} años, ${nse.toLowerCase()} NSE. ${ocupacion} en ${ciudad}. Vive ${convivencia.toLowerCase()}. Su motivación principal es ${motivacion.toLowerCase()}. Principal barrera: ${painPoint.toLowerCase()}.`;
-
-        const quien = `${nombreCompleto}, ${edadExacta} años, ${pronombre.toLowerCase()}, ${ocupacion}, NSE ${nse}, residente en ${ciudad}.`;
-        const que = `Prefiere ${gustos}. ${motivacion}.`;
-        const como = `${formaConsumo}. Dispositivo principal: ${dispositivo}.`;
-        const cuando = horario;
-        const donde = lugar;
-
-        // Behavior tag (derivado de forma de consumo + dispositivo)
-        const behavior = `${formaConsumo.split(' ')[0]} ${formaConsumo.split(' ')[1] || ''} · ${dispositivo}`.trim();
-
-        // Profile label (basado en ocupación + rango de edad)
-        const profileLabel = `${ocupacion} · ${edadRango.label}`;
-
+        const perfil = `${pronombre} de ${edadExacta} años, NSE ${nse}. ${ocupacion} en ${ciudad}. Vive ${convivencia.toLowerCase()}. Su motivación principal es ${motivacion.toLowerCase()}. Principal barrera: ${painPoint.toLowerCase()}.`;
         return {
-            id,
-            nombre: nombreCompleto,
-            profile: profileLabel,
-            behavior,
-            city: ciudad,
-            ciudad,
-            edad: edadRango.label,
-            edadExacta,
-            genero,
-            nse,
-            ocupacion,
-            vivienda: convivencia,
-            device: dispositivo,
-            gustos,
-            perfil,
-            quien,
-            que,
-            como,
-            cuando,
-            donde,
-            motivacion,
-            painPoint,
+            id, nombre: nombreCompleto, profile: `${ocupacion} · ${edadRango.label}`,
+            behavior: `${formaConsumo.split(' ')[0]} · ${dispositivo}`,
+            city: ciudad, ciudad, edad: edadRango.label, edadExacta, genero, nse, ocupacion,
+            vivienda: convivencia, device: dispositivo, gustos, perfil,
+            quien: `${nombreCompleto}, ${edadExacta} años, ${pronombre.toLowerCase()}, ${ocupacion}, NSE ${nse}, residente en ${ciudad}.`,
+            que: `Prefiere ${gustos}. ${motivacion}.`,
+            como: `${formaConsumo}. Dispositivo principal: ${dispositivo}.`,
+            cuando: horario, donde: lugar, motivacion, painPoint,
             consumo: Math.max(15, Math.min(180, consumo)),
             freq: Math.max(0.5, Math.min(9, freq)),
             satisf: Math.max(1, Math.min(10, satisf)),
@@ -1657,26 +1877,291 @@
         };
     }
 
-    // ── Generar los 2,000 perfiles ───────────────────────────────────
-    console.time('generando audiencias');
     const audienceData = [];
     for (let i = 1; i <= 2000; i++) audienceData.push(generarPersona(i));
-    console.timeEnd('generando audiencias');
+
+    // ══════════════════════════════════════════════════════════════════
+    //  COMMAND CENTER · AUDIENCE MATRIX
+    // ══════════════════════════════════════════════════════════════════
+
+    // Colores por columna
+    const COL_COLORS = {
+        unkExt:  '#607d8b',
+        knwExt:  '#00b4d8',
+        unkInt:  '#b388ff',
+        knwInt:  '#00d47a',
+        total:   '#E50914'
+    };
+
+    // Datos de la matriz — cada fila del funnel suma 100%
+    // La progresión narra la historia de conversión de Netflix Colombia:
+    // · Potential Market: dominado por desconocidos externos (nadie sabe quién es)
+    // · Awareness: empieza el reconocimiento de marca; Known External crece
+    // · Interest: los internos (que ya probaron) ganan peso
+    // · Intention → Action: Unknown Internal se convierte en Known Internal
+    // · Engagement / Loyalty: dominancia total de Known Internal (usuarios activos)
+
+    const MATRIX_ROWS = [
+        {
+            stage: 'Potential Market',
+            icon: '🌐',
+            color: '#607d8b',
+            unkExt: 68, knwExt: 20, unkInt: 9, knwInt: 3,
+            nextStage: { label: 'Awareness', color: '#00b4d8', steps: [
+                { n: '01', text: 'Campañas OOH y radio en ciudades secundarias (Cúcuta, Ibagué, Montería) para generar reconocimiento de marca.' },
+                { n: '02', text: 'Alianzas con operadores móviles (Claro, Tigo, Movistar) para ofrecer datos gratis de Netflix y prueba gratuita de 30 días.' },
+                { n: '03', text: 'Activaciones en centros comerciales y eventos masivos con demostraciones en vivo del catálogo colombiano.' }
+            ]},
+            insight: {
+                perfil: 'Adultos colombianos 18–55 años, NSE Bajo a Alto, que aún no tienen contacto con Netflix o lo conocen de oídas. Mayoría en ciudades secundarias (Cúcuta, Ibagué, Montería).',
+                consumo: 'No consumen contenido de streaming de forma regular. Usan principalmente televisión abierta, YouTube gratuito o plataformas piratas. Tiempo promedio en pantalla: 35–55 min/día.',
+                dispositivo: 'Smartphone de gama baja–media. Conexión 4G inestable. Pocos hogares con Smart TV.',
+                motivacion: 'Entretenimiento familiar económico. Buscan acceso a fútbol, novelas colombianas y contenido popular. El costo es la principal barrera de entrada.',
+                accionable: '💡 Activar campañas de awareness en medios masivos (radio, OOH) en ciudades secundarias. Ofrecer plan básico de bajo costo o prueba gratuita de 30 días. Partnerships con operadores móviles para datos gratis de Netflix.'
+            }
+        },
+        {
+            stage: 'Awareness',
+            icon: '👁',
+            color: '#00b4d8',
+            unkExt: 42, knwExt: 38, unkInt: 13, knwInt: 7,
+            nextStage: { label: 'Interest', color: '#b388ff', steps: [
+                { n: '01', text: 'Retargeting digital con trailers de las series más virales dirigido a quienes visitaron el sitio o vieron publicidad de Netflix.' },
+                { n: '02', text: 'Campaña de influencers colombianos en Instagram y TikTok haciendo reacciones en vivo a estrenos del catálogo local.' },
+                { n: '03', text: 'Email y SMS con "Las 5 series de las que todos hablan este mes" para despertar curiosidad activa por el contenido.' }
+            ]},
+            insight: {
+                perfil: 'Adultos 18–45 años que han visto publicidad de Netflix o conocen la plataforma por referidos. Concentrados en Bogotá, Medellín y Cali. NSE Medio y Medio-Alto.',
+                consumo: 'Ven contenido en YouTube y han probado plataformas gratuitas. Consumen 60–80 min/día. Están familiarizados con series de éxito internacional mencionadas en redes sociales.',
+                dispositivo: 'Smartphone como dispositivo primario. Algunos hogares tienen Smart TV sin suscripción activa.',
+                motivacion: 'Curiosidad por series virales (Squid Game, La Casa de Papel). Presión social de amigos y familia que ya tienen Netflix.',
+                accionable: '💡 Retargeting digital con trailers de series de alto impacto. Campaña "primer mes gratis" dirigida a este segmento. Activar influencers locales para demostración de valor de catálogo colombiano.'
+            }
+        },
+        {
+            stage: 'Interest',
+            icon: '🔍',
+            color: '#b388ff',
+            unkExt: 22, knwExt: 35, unkInt: 28, knwInt: 15,
+            nextStage: { label: 'Intention', color: '#ffd700', steps: [
+                { n: '01', text: 'Mostrar contenido exclusivo colombiano que NO está disponible en ninguna otra plataforma para crear urgencia de suscripción.' },
+                { n: '02', text: 'Ofrecer el plan compartido "En familia" con precio dividido, reduciendo la barrera económica del costo mensual.' },
+                { n: '03', text: 'Ads con contador regresivo de lanzamientos próximos: "Falta 1 semana para el estreno de X — ¿ya tienes tu cuenta?"' }
+            ]},
+            insight: {
+                perfil: 'Usuarios que han buscado activamente Netflix, comparado planes o probado con cuenta de familiar/amigo. Edad 22–40 años. NSE Medio a Alto. Alta presencia en Medellín y Bogotá.',
+                consumo: 'Han visto al menos 1–2 temporadas completas en cuenta prestada. Consumen 80–100 min/sesión. Conocen el catálogo y tienen preferencias claras (K-drama, thrillers, contenido colombiano).',
+                dispositivo: 'Laptop o Smart TV. Conexión WiFi estable en hogar. Algunos ya descargaron la app en smartphone.',
+                motivacion: 'Quieren ver series específicas que no están en plataformas gratuitas. La comodidad del catálogo les atrae. Comparan precio vs valor con otras plataformas.',
+                accionable: '💡 Email marketing con "Las series que te perdiste este mes". Mostrar el catálogo colombiano exclusivo. Ofrecer plan compartido para reducir costo percibido. Ads en YouTube con contenido exclusivo.'
+            }
+        },
+        {
+            stage: 'Intention',
+            icon: '🎯',
+            color: '#ffd700',
+            unkExt: 10, knwExt: 28, unkInt: 30, knwInt: 32,
+            nextStage: { label: 'Action', color: '#ff8c00', steps: [
+                { n: '01', text: 'Simplificar el proceso de pago: habilitar PSE, Nequi, daviplata y pago en efectivo en Éxito/Baloto para eliminar fricción.' },
+                { n: '02', text: 'Push notification personalizado vinculado al estreno exacto que motivó el interés: "Tu serie favorita estrena mañana — activa tu cuenta hoy".' },
+                { n: '03', text: 'Oferta de tiempo limitado "2 meses al precio de 1" enviada al segmento que visitó la página de precios en los últimos 7 días.' }
+            ]},
+            insight: {
+                perfil: 'Usuarios en proceso activo de suscripción. Tienen tarjeta de crédito/débito lista o están buscando método de pago. Edad 25–45 años. NSE Medio-Alto. Principalmente Bogotá y Medellín.',
+                consumo: 'Han definido qué van a ver primero. Listas mentales de series pendientes. Consumen trailers y reviews en YouTube y redes sociales.',
+                dispositivo: 'Smart TV o laptop como dispositivo destino. La mayoría ya tiene la app instalada.',
+                motivacion: 'Una serie específica o un evento (nuevo lanzamiento, temporada final) los empuja al punto de decisión. La recomendación de un amigo cercano es el detonante más frecuente.',
+                accionable: '💡 Push notification de lanzamientos relevantes. Simplificar el proceso de pago (PSE, Nequi, pago en efectivo en tiendas). Campaña "Únete esta semana, obtén 2 meses al precio de 1".'
+            }
+        },
+        {
+            stage: 'Action',
+            icon: '✅',
+            color: '#ff8c00',
+            unkExt: 4, knwExt: 18, unkInt: 22, knwInt: 56,
+            nextStage: { label: 'Engagement', color: '#E50914', steps: [
+                { n: '01', text: 'Onboarding personalizado: encuesta de gustos en los primeros 3 días para calibrar el algoritmo y mostrar contenido relevante desde el inicio.' },
+                { n: '02', text: 'Notificaciones de nuevos episodios de series en progreso y recordatorio de contenido pendiente para construir el hábito de consumo diario.' },
+                { n: '03', text: 'Programa de referidos: descuento en el siguiente mes por cada amigo invitado que se suscriba, activando el ciclo viral.' }
+            ]},
+            insight: {
+                perfil: 'Suscriptores activos con menos de 3 meses en la plataforma. Edad 20–50 años. Distribución amplia por NSE. Alta concentración en las 4 principales ciudades.',
+                consumo: 'Sesiones de 70–110 min/día. Alta frecuencia 4–6x por semana. Explorando el catálogo activamente. En fase de "luna de miel" con la plataforma.',
+                dispositivo: 'Smart TV en sala para contenido familiar. Smartphone para consumo personal en tránsito.',
+                motivacion: 'Completar las series que motivaron la suscripción. Descubrir contenido nuevo recomendado por el algoritmo. Compartir la cuenta con familia o pareja.',
+                accionable: '💡 Onboarding personalizado con encuesta de gustos en los primeros 3 días. Notificaciones de nuevos episodios de series en progreso. Programa de referidos con descuento en siguiente mes.'
+            }
+        },
+        {
+            stage: 'Engagement',
+            icon: '🔥',
+            color: '#E50914',
+            unkExt: 2, knwExt: 8, unkInt: 12, knwInt: 78,
+            nextStage: { label: 'Loyalty', color: '#00d47a', steps: [
+                { n: '01', text: 'Upgrade a plan Premium con beneficio de pantalla adicional para el usuario recurrente que ya comparte la cuenta.' },
+                { n: '02', text: 'Gamificación: insignias digitales por temporadas completadas, géneros explorados y horas de consumo acumuladas.' },
+                { n: '03', text: 'Encuesta mensual de NPS con seguimiento personalizado: al usuario satisfecho ofrecerle plan anual con descuento del 20%.' }
+            ]},
+            insight: {
+                perfil: 'Suscriptores con 3–18 meses de antigüedad. Usuarios comprometidos con rutinas de consumo establecidas. Edad 25–55 años. NSE Medio a Alto. Distribuidos en todas las ciudades principales.',
+                consumo: 'Consumo diario de 60–120 min. Frecuencia 5–7x por semana. Utilizan múltiples perfiles. Descargan contenido para consumo offline. Muy familiarizados con el catálogo.',
+                dispositivo: 'Ecosistema multi-dispositivo: Smart TV en casa, smartphone en tránsito, tablet en viajes.',
+                motivacion: 'La plataforma es parte de su rutina de entretenimiento. Alta satisfacción con el catálogo. El hábito es el principal factor de retención.',
+                accionable: '💡 Mantener el engagement con notificaciones de nuevas temporadas. Ofrecer upgrade a plan Premium con pantalla adicional. Gamificación: insignias por series completadas. Encuesta de NPS mensual.'
+            }
+        },
+        {
+            stage: 'Loyalty',
+            icon: '💎',
+            color: '#00d47a',
+            unkExt: 1, knwExt: 4, unkInt: 6, knwInt: 89,
+            nextStage: { label: 'Embajadores', color: '#ffd700', steps: [
+                { n: '01', text: 'Programa de embajadores con beneficios exclusivos: acceso anticipado a estrenos, merchandise Netflix Colombia y créditos en cuenta.' },
+                { n: '02', text: 'Co-creación de contenido: encuestas de qué producciones colombianas desean ver, dándoles agencia real sobre el catálogo.' },
+                { n: '03', text: 'Descuento en plan anual pre-pagado con renovación automática para blindar la relación a largo plazo y reducir churn futuro.' }
+            ]},
+            insight: {
+                perfil: 'Suscriptores con más de 18 meses. Promotores netos de la marca. Comparten recomendaciones activamente. Edad 28–60 años. NSE Medio-Alto a Alto. Clientes de plan Premium o Estándar.',
+                consumo: 'Consumo diario consolidado. 80–150 min/día. Ven contenido con familiares y amigos. Han recomendado Netflix a al menos 3 personas en el último año.',
+                dispositivo: 'Smart TV 4K como dispositivo principal. Usan todas las funciones: descargas, perfiles, listas, historial.',
+                motivacion: 'La plataforma es parte de su identidad como consumidor de entretenimiento. Alta tolerancia al precio. La cancelación implica pérdida de historial y listas acumuladas.',
+                accionable: '💡 Programa de embajadores con beneficios exclusivos. Acceso anticipado a contenido nuevo. Descuento en plan anual. Co-creación: encuestas de contenido deseado para Colombia.'
+            }
+        }
+    ];
+
+    // Calcular tasas reales del funnel desde los 2,000 perfiles
+    const _n = audienceData.length;
+    const avgIdx = audienceData.reduce((s,d)=>s+d.index,0)/_n;
+    const avgSat = audienceData.reduce((s,d)=>s+d.satisf,0)/_n;
+    const iF = avgIdx/10, sF = avgSat/10;
+    const convRate  = Math.round((0.40 + iF*0.22) * 100);
+    const engRate   = Math.round((0.28 + iF*0.18 + sF*0.10) * 100);
+    const loyRate   = Math.round((0.12 + iF*0.12 + sF*0.08) * 100);
+
+    document.getElementById('cc-conv-rate').textContent = convRate + '%';
+    document.getElementById('cc-eng-rate').textContent  = engRate  + '%';
+    document.getElementById('cc-loy-rate').textContent  = loyRate  + '%';
+
+    // Renderizar matriz
+    let openDetailRow = null;
+
+    function pctCell(val, color) {
+        return `<div class="cc-pct-cell">
+            <span class="cc-pct-val" style="color:${color}">${val}%</span>
+            <div class="cc-pct-bar"><div class="cc-pct-fill" style="width:${val}%;background:${color}"></div></div>
+        </div>`;
+    }
+
+    function renderMatrix() {
+        const tbody = document.getElementById('cc-matrix-body');
+        tbody.innerHTML = '';
+
+        MATRIX_ROWS.forEach((row, idx) => {
+            // ── Main data row ──────────────────────────────────────────
+            const tr = document.createElement('tr');
+            tr.className = 'data-row';
+            tr.id = `cc-row-${idx}`;
+            tr.innerHTML = `
+                <td>
+                    <div class="expand-btn-cc" id="cc-expand-${idx}" onclick="toggleCCDetail(${idx})">▶</div>
+                </td>
+                <td class="td-stage">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <span style="font-size:18px;line-height:1">${row.icon}</span>
+                        <div>
+                            <div style="font-size:13px;font-weight:600;color:${row.color}">${row.stage}</div>
+                            <div style="font-size:10px;color:var(--text-dimmer);margin-top:2px;">Etapa ${idx+1} / 7</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${pctCell(row.unkExt, COL_COLORS.unkExt)}</td>
+                <td>${pctCell(row.knwExt, COL_COLORS.knwExt)}</td>
+                <td>${pctCell(row.unkInt, COL_COLORS.unkInt)}</td>
+                <td>${pctCell(row.knwInt, COL_COLORS.knwInt)}</td>
+                <td class="td-total"><span style="color:${row.color}">100%</span></td>`;
+            tbody.appendChild(tr);
+
+            // ── Detail row — always immediately after its parent ───────
+            const detailTr = document.createElement('tr');
+            detailTr.className = 'cc-detail-row';
+            detailTr.id = `cc-detail-${idx}`;
+            detailTr.innerHTML = `
+                <td class="detail-cell" colspan="7" style="border-top:3px solid ${row.color}55;">
+                    <div class="cc-detail-inner">
+                        <div class="cc-detail-box">
+                            <div class="cc-detail-label" style="color:${row.color}">👤 Perfil del Usuario</div>
+                            <p class="cc-detail-text">${row.insight.perfil}</p>
+                        </div>
+                        <div class="cc-detail-box">
+                            <div class="cc-detail-label" style="color:var(--blue)">📺 Comportamiento de Consumo</div>
+                            <p class="cc-detail-text">${row.insight.consumo}</p>
+                        </div>
+                        <div class="cc-detail-box">
+                            <div class="cc-detail-label" style="color:var(--purple)">📱 Dispositivo Principal</div>
+                            <p class="cc-detail-text">${row.insight.dispositivo}</p>
+                        </div>
+                        <div class="cc-detail-box">
+                            <div class="cc-detail-label" style="color:var(--gold)">💫 Motivaciones de Uso</div>
+                            <p class="cc-detail-text">${row.insight.motivacion}</p>
+                        </div>
+                        <div class="cc-detail-box wide">
+                            <div class="cc-detail-label" style="color:var(--green)">⚡ Insight Accionable</div>
+                            <p class="cc-detail-text" style="color:var(--text)">${row.insight.accionable}</p>
+                        </div>
+                        <div class="cc-next-stage">
+                            <div class="cc-next-stage-title">🚀 Cómo mover este segmento hacia &nbsp;<span style="color:${row.nextStage.color}">${row.nextStage.label}</span></div>
+                            <div class="cc-next-steps">
+                                ${row.nextStage.steps.map(s=>`
+                                <div class="cc-next-step">
+                                    <div class="cc-next-step-num" style="color:${row.nextStage.color}">${s.n}</div>
+                                    <div class="cc-next-step-text">${s.text}</div>
+                                </div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </td>`;
+            tbody.appendChild(detailTr);
+        });
+    }
+
+    function toggleCCDetail(idx) {
+        const detailTr = document.getElementById(`cc-detail-${idx}`);
+        const btn      = document.getElementById(`cc-expand-${idx}`);
+        const mainTr   = document.getElementById(`cc-row-${idx}`);
+        const isOpen   = detailTr.classList.contains('open');
+
+        // Close previously open panel
+        if (openDetailRow !== null && openDetailRow !== idx) {
+            document.getElementById(`cc-detail-${openDetailRow}`).classList.remove('open');
+            document.getElementById(`cc-expand-${openDetailRow}`).classList.remove('open');
+            document.getElementById(`cc-row-${openDetailRow}`).classList.remove('expanded');
+        }
+
+        detailTr.classList.toggle('open', !isOpen);
+        btn.classList.toggle('open', !isOpen);
+        mainTr.classList.toggle('expanded', !isOpen);
+        openDetailRow = isOpen ? null : idx;
+
+        if (!isOpen) {
+            setTimeout(() => detailTr.scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
+        }
+    }
+
+    renderMatrix();
 
     // ══════════════════════════════════
     //  KPIs
     // ══════════════════════════════════
     function calcKPIs() {
         const n = audienceData.length;
-        const avgConsumo = (audienceData.reduce((s, d) => s + d.consumo, 0) / n).toFixed(0);
-        const avgIndex   = (audienceData.reduce((s, d) => s + d.index,   0) / n).toFixed(2);
-        const avgUX      = (audienceData.reduce((s, d) => s + d.satisf,  0) / n).toFixed(1);
-
+        const avgConsumo = (audienceData.reduce((s,d)=>s+d.consumo,0)/n).toFixed(0);
+        const avgIndex   = (audienceData.reduce((s,d)=>s+d.index,  0)/n).toFixed(2);
+        const avgUX      = (audienceData.reduce((s,d)=>s+d.satisf, 0)/n).toFixed(1);
         document.getElementById('kpi-tiempo').textContent     = avgConsumo;
         document.getElementById('kpi-engagement').textContent = avgIndex;
         document.getElementById('kpi-ux').textContent         = avgUX;
         document.getElementById('kpi-audiencias').textContent = n.toLocaleString('es-CO');
-
         const uxTrend = document.getElementById('kpi-ux-trend');
         if (parseFloat(avgUX) >= 6.5) {
             uxTrend.className = 'kpi-trend up';
@@ -1689,7 +2174,7 @@
     }
 
     // ══════════════════════════════════
-    //  AUDIENCE CARDS (paginadas)
+    //  AUDIENCE CARDS
     // ══════════════════════════════════
     const PAGE_SIZE = 40;
     let currentPage = 0;
@@ -1698,21 +2183,19 @@
     function renderCards(data, append = false) {
         const grid = document.getElementById('audience-cards-grid');
         if (!append) { grid.innerHTML = ''; currentPage = 0; }
-
         const start = currentPage * PAGE_SIZE;
         const slice = data.slice(start, start + PAGE_SIZE);
-
         const html = slice.map(d => {
-            const idxColor  = d.index >= 6 ? 'var(--green)' : d.index >= 5 ? 'var(--orange)' : 'var(--red)';
-            const satColor  = d.satisf >= 6.5 ? 'var(--green)' : d.satisf >= 5 ? 'var(--orange)' : 'var(--red)';
-            const idxBadge  = d.index >= 6 ? 'badge-green' : d.index >= 5 ? 'badge-orange' : 'badge-red';
-            const generoIcon = d.genero === 'M' ? '♂' : '♀';
+            const idxColor = d.index >= 6 ? 'var(--green)' : d.index >= 5 ? 'var(--orange)' : 'var(--red)';
+            const satColor = d.satisf >= 6.5 ? 'var(--green)' : d.satisf >= 5 ? 'var(--orange)' : 'var(--red)';
+            const idxBadge = d.index >= 6 ? 'badge-green' : d.index >= 5 ? 'badge-orange' : 'badge-red';
+            const gIcon = d.genero === 'M' ? '♂' : '♀';
             return `
 <div class="aud-card">
   <div class="aud-card-header" onclick="toggleDetail(${d.id})">
     <div style="flex:1">
       <div class="aud-card-id">SEG · ${String(d.id).padStart(4,'0')}</div>
-      <div class="aud-card-name">${d.nombre} <span style="font-size:10px;color:var(--text-dimmer)">${generoIcon} ${d.edadExacta} años</span></div>
+      <div class="aud-card-name">${d.nombre} <span style="font-size:10px;color:var(--text-dimmer)">${gIcon} ${d.edadExacta} años</span></div>
       <div class="aud-card-traits">${d.ocupacion}</div>
     </div>
     <div class="aud-card-meta">
@@ -1721,102 +2204,39 @@
       <span class="badge ${idxBadge}" style="margin-top:4px">${d.index}</span>
     </div>
   </div>
-
   <div class="aud-card-metrics">
-    <div class="aud-metric-item">
-      <span class="aud-metric-val" style="color:var(--blue)">${d.consumo}<span style="font-size:9px;color:var(--text-dimmer)">min</span></span>
-      <span class="aud-metric-lbl">Consumo</span>
-    </div>
-    <div class="aud-metric-item">
-      <span class="aud-metric-val" style="color:var(--purple)">${d.freq}<span style="font-size:9px;color:var(--text-dimmer)">/sem</span></span>
-      <span class="aud-metric-lbl">Frecuencia</span>
-    </div>
-    <div class="aud-metric-item">
-      <span class="aud-metric-val" style="color:${satColor}">${d.satisf}</span>
-      <span class="aud-metric-lbl">Satisf.</span>
-    </div>
-    <div class="aud-metric-item">
-      <span class="aud-metric-val" style="color:${idxColor}">${d.index}</span>
-      <span class="aud-metric-lbl">Índice</span>
-    </div>
+    <div class="aud-metric-item"><span class="aud-metric-val" style="color:var(--blue)">${d.consumo}<span style="font-size:9px;color:var(--text-dimmer)">min</span></span><span class="aud-metric-lbl">Consumo</span></div>
+    <div class="aud-metric-item"><span class="aud-metric-val" style="color:var(--purple)">${d.freq}<span style="font-size:9px;color:var(--text-dimmer)">/sem</span></span><span class="aud-metric-lbl">Frecuencia</span></div>
+    <div class="aud-metric-item"><span class="aud-metric-val" style="color:${satColor}">${d.satisf}</span><span class="aud-metric-lbl">Satisf.</span></div>
+    <div class="aud-metric-item"><span class="aud-metric-val" style="color:${idxColor}">${d.index}</span><span class="aud-metric-lbl">Índice</span></div>
   </div>
-
   <button class="aud-expand-btn" id="btn-${d.id}" onclick="toggleDetail(${d.id})">
-    <span>Ver perfil completo</span>
-    <span class="expand-arrow">▼</span>
+    <span>Ver perfil completo</span><span class="expand-arrow">▼</span>
   </button>
-
   <div class="aud-detail" id="detail-${d.id}">
     <div class="aud-5w-grid">
-      <div class="aud-5w-item" style="grid-column:span 2">
-        <div class="aud-5w-key">¿Quién?</div>
-        <div class="aud-5w-val">${d.quien}</div>
-      </div>
-      <div class="aud-5w-item">
-        <div class="aud-5w-key">Lugar de residencia</div>
-        <div class="aud-5w-val">${d.city}</div>
-      </div>
-      <div class="aud-5w-item">
-        <div class="aud-5w-key">Con quién vive</div>
-        <div class="aud-5w-val">${d.vivienda}</div>
-      </div>
-      <div class="aud-5w-item" style="grid-column:span 2">
-        <div class="aud-5w-key">Intereses y gustos</div>
-        <div class="aud-5w-val">${d.gustos}</div>
-      </div>
-      <div class="aud-5w-item" style="grid-column:span 2">
-        <div class="aud-5w-key">¿Qué consume?</div>
-        <div class="aud-5w-val">${d.que}</div>
-      </div>
-      <div class="aud-5w-item">
-        <div class="aud-5w-key">Forma de consumo</div>
-        <div class="aud-5w-val">${d.como}</div>
-      </div>
-      <div class="aud-5w-item">
-        <div class="aud-5w-key">Dispositivo principal</div>
-        <div class="aud-5w-val">${d.device}</div>
-      </div>
-      <div class="aud-5w-item">
-        <div class="aud-5w-key">¿Cuándo consume?</div>
-        <div class="aud-5w-val">${d.cuando}</div>
-      </div>
-      <div class="aud-5w-item">
-        <div class="aud-5w-key">¿Dónde?</div>
-        <div class="aud-5w-val">${d.donde}</div>
-      </div>
-      <div class="aud-5w-item" style="grid-column:span 2">
-        <div class="aud-5w-key">Principal barrera</div>
-        <div class="aud-5w-val" style="color:rgba(229,9,20,0.8)">${d.painPoint}</div>
-      </div>
+      <div class="aud-5w-item" style="grid-column:span 2"><div class="aud-5w-key">¿Quién?</div><div class="aud-5w-val">${d.quien}</div></div>
+      <div class="aud-5w-item"><div class="aud-5w-key">Lugar de residencia</div><div class="aud-5w-val">${d.city}</div></div>
+      <div class="aud-5w-item"><div class="aud-5w-key">Con quién vive</div><div class="aud-5w-val">${d.vivienda}</div></div>
+      <div class="aud-5w-item" style="grid-column:span 2"><div class="aud-5w-key">Intereses y gustos</div><div class="aud-5w-val">${d.gustos}</div></div>
+      <div class="aud-5w-item" style="grid-column:span 2"><div class="aud-5w-key">¿Qué consume?</div><div class="aud-5w-val">${d.que}</div></div>
+      <div class="aud-5w-item"><div class="aud-5w-key">Forma de consumo</div><div class="aud-5w-val">${d.como}</div></div>
+      <div class="aud-5w-item"><div class="aud-5w-key">Dispositivo principal</div><div class="aud-5w-val">${d.device}</div></div>
+      <div class="aud-5w-item"><div class="aud-5w-key">¿Cuándo consume?</div><div class="aud-5w-val">${d.cuando}</div></div>
+      <div class="aud-5w-item"><div class="aud-5w-key">¿Dónde?</div><div class="aud-5w-val">${d.donde}</div></div>
+      <div class="aud-5w-item" style="grid-column:span 2"><div class="aud-5w-key">Principal barrera</div><div class="aud-5w-val" style="color:rgba(229,9,20,0.8)">${d.painPoint}</div></div>
     </div>
-    <div class="aud-detail-section">
-      <div class="aud-detail-label">Perfil del Segmento</div>
-      <div class="aud-detail-text">${d.perfil}</div>
-    </div>
+    <div class="aud-detail-section"><div class="aud-detail-label">Perfil del Segmento</div><div class="aud-detail-text">${d.perfil}</div></div>
     <div class="aud-detail-stats">
-      <div class="aud-stat-box">
-        <div class="aud-stat-val" style="color:var(--blue)">${d.consumo}<span style="font-size:9px">min</span></div>
-        <div class="aud-stat-lbl">T. promedio</div>
-      </div>
-      <div class="aud-stat-box">
-        <div class="aud-stat-val" style="color:var(--purple)">${d.freq}x</div>
-        <div class="aud-stat-lbl">Frec/sem</div>
-      </div>
-      <div class="aud-stat-box">
-        <div class="aud-stat-val" style="color:${satColor}">${d.satisf}</div>
-        <div class="aud-stat-lbl">Satisfacción</div>
-      </div>
-      <div class="aud-stat-box">
-        <div class="aud-stat-val" style="color:${idxColor}">${d.index}</div>
-        <div class="aud-stat-lbl">Índice</div>
-      </div>
+      <div class="aud-stat-box"><div class="aud-stat-val" style="color:var(--blue)">${d.consumo}<span style="font-size:9px">min</span></div><div class="aud-stat-lbl">T. promedio</div></div>
+      <div class="aud-stat-box"><div class="aud-stat-val" style="color:var(--purple)">${d.freq}x</div><div class="aud-stat-lbl">Frec/sem</div></div>
+      <div class="aud-stat-box"><div class="aud-stat-val" style="color:${satColor}">${d.satisf}</div><div class="aud-stat-lbl">Satisfacción</div></div>
+      <div class="aud-stat-box"><div class="aud-stat-val" style="color:${idxColor}">${d.index}</div><div class="aud-stat-lbl">Índice</div></div>
     </div>
   </div>
 </div>`;
         }).join('');
-
         grid.insertAdjacentHTML('beforeend', html);
-
         const existing = document.getElementById('load-more-btn');
         if (existing) existing.remove();
         if (start + PAGE_SIZE < data.length) {
@@ -1861,173 +2281,90 @@
     });
 
     // ══════════════════════════════════
-    //  CHART.JS THEME
+    //  CHARTS
     // ══════════════════════════════════
     Chart.defaults.color = '#888';
     Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
     Chart.defaults.font.family = "'Inter', sans-serif";
+    const RED = '#E50914', RED_T = 'rgba(229,9,20,0.15)';
+    const GREEN = '#00d47a', GREEN_T = 'rgba(0,212,122,0.15)';
+    const BLUE = '#00b4d8', ORANGE = '#ff8c00', PURPLE = '#b388ff', GOLD = '#ffd700';
 
-    const RED    = '#E50914';
-    const RED_T  = 'rgba(229,9,20,0.15)';
-    const GREEN  = '#00d47a';
-    const GREEN_T = 'rgba(0,212,122,0.15)';
-    const BLUE   = '#00b4d8';
-    const ORANGE = '#ff8c00';
-    const PURPLE = '#b388ff';
-    const GOLD   = '#ffd700';
-
-    // ── Radar ────────────────────────────────────────────────────────
-    const _n = audienceData.length;
+    // Radar
+    const n2 = audienceData.length;
     const avgForRadar = [
-        audienceData.reduce((s, d) => s + (d.satisf / 10) * 10, 0) / _n,
-        audienceData.reduce((s, d) => s + d.index, 0) / _n,
-        audienceData.reduce((s, d) => s + d.satisf, 0) / _n,
-        audienceData.reduce((s, d) => s + (d.freq / 9) * 10, 0) / _n,
-        audienceData.reduce((s, d) => s + (d.consumo / 180) * 10, 0) / _n,
-        audienceData.reduce((s, d) => s + (d.index / 10) * 8.5, 0) / _n,
+        audienceData.reduce((s,d)=>s+(d.satisf/10)*10,0)/n2,
+        audienceData.reduce((s,d)=>s+d.index,0)/n2,
+        audienceData.reduce((s,d)=>s+d.satisf,0)/n2,
+        audienceData.reduce((s,d)=>s+(d.freq/9)*10,0)/n2,
+        audienceData.reduce((s,d)=>s+(d.consumo/180)*10,0)/n2,
+        audienceData.reduce((s,d)=>s+(d.index/10)*8.5,0)/n2,
     ];
     new Chart(document.getElementById('chart-radar'), {
-        type: 'radar',
-        data: {
-            labels: ['Retención','Engagement','Satisfacción','Frecuencia','Consumo','Lealtad'],
-            datasets: [{
-                label: 'Colombia Promedio',
-                data: avgForRadar,
-                borderColor: RED, backgroundColor: RED_T,
-                pointBackgroundColor: RED, pointBorderColor: '#050505',
-                pointHoverBackgroundColor: '#fff', borderWidth: 2
-            }, {
-                label: 'Benchmark Regional',
-                data: [6.5,6.2,6.8,5.5,6.0,6.3],
-                borderColor: 'rgba(255,255,255,0.2)', backgroundColor: 'rgba(255,255,255,0.03)',
-                pointBackgroundColor: 'rgba(255,255,255,0.4)', borderWidth: 1, borderDash: [4,4]
-            }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            scales: { r: { min:0, max:10, ticks:{ stepSize:2, color:'#555', backdropColor:'transparent', font:{size:9} }, grid:{color:'rgba(255,255,255,0.06)'}, angleLines:{color:'rgba(255,255,255,0.08)'}, pointLabels:{color:'#999',font:{size:10}} } },
-            plugins: { legend: { labels: { font:{size:10}, boxWidth:12 } } }
-        }
+        type:'radar',
+        data:{ labels:['Retención','Engagement','Satisfacción','Frecuencia','Consumo','Lealtad'], datasets:[{label:'Colombia Promedio',data:avgForRadar,borderColor:RED,backgroundColor:RED_T,pointBackgroundColor:RED,pointBorderColor:'#050505',borderWidth:2},{label:'Benchmark Regional',data:[6.5,6.2,6.8,5.5,6.0,6.3],borderColor:'rgba(255,255,255,0.2)',backgroundColor:'rgba(255,255,255,0.03)',pointBackgroundColor:'rgba(255,255,255,0.4)',borderWidth:1,borderDash:[4,4]}]},
+        options:{ responsive:true, maintainAspectRatio:false, scales:{ r:{ min:0,max:10, ticks:{stepSize:2,color:'#555',backdropColor:'transparent',font:{size:9}}, grid:{color:'rgba(255,255,255,0.06)'}, angleLines:{color:'rgba(255,255,255,0.08)'}, pointLabels:{color:'#999',font:{size:10}} } }, plugins:{legend:{labels:{font:{size:10},boxWidth:12}}} }
     });
 
-    // ── Doughnut ─────────────────────────────────────────────────────
-    const tier1 = audienceData.filter(d => d.index >= 8).length;
-    const tier2 = audienceData.filter(d => d.index >= 5.5 && d.index < 8).length;
-    const tier3 = audienceData.filter(d => d.index < 5.5).length;
+    // Doughnut
+    const tier1 = audienceData.filter(d=>d.index>=8).length;
+    const tier2 = audienceData.filter(d=>d.index>=5.5&&d.index<8).length;
+    const tier3 = audienceData.filter(d=>d.index<5.5).length;
     new Chart(document.getElementById('chart-doughnut'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Tier 1 (8–10)','Tier 2 (5.5–7.9)','Tier 3 (<5.5)'],
-            datasets: [{ data:[tier1,tier2,tier3], backgroundColor:[GREEN_T,'rgba(255,140,0,0.2)',RED_T], borderColor:[GREEN,ORANGE,RED], borderWidth:2, hoverOffset:8 }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false, cutout:'65%',
-            plugins: {
-                legend: { position:'bottom', labels:{font:{size:10},boxWidth:10,padding:14} },
-                tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} personas` } }
-            }
-        }
+        type:'doughnut',
+        data:{ labels:['Tier 1 (8–10)','Tier 2 (5.5–7.9)','Tier 3 (<5.5)'], datasets:[{data:[tier1,tier2,tier3],backgroundColor:[GREEN_T,'rgba(255,140,0,0.2)',RED_T],borderColor:[GREEN,ORANGE,RED],borderWidth:2,hoverOffset:8}]},
+        options:{ responsive:true, maintainAspectRatio:false, cutout:'65%', plugins:{ legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:14}}, tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.raw} personas`}} } }
     });
 
-    // ── Line Chart — evolución por ciudad ────────────────────────────
+    // Line
     const MAIN_CITIES = ['Bogotá','Medellín','Cali','Barranquilla'];
     const cityBaseAvg = {};
     MAIN_CITIES.forEach(city => {
-        const dd = audienceData.filter(d => d.city === city);
+        const dd = audienceData.filter(d=>d.city===city);
         cityBaseAvg[city] = dd.length ? dd.reduce((s,d)=>s+d.index,0)/dd.length : 5.0;
     });
-    const makeProgression = (base, id) =>
-        [0,1,2,3,4,5].map(m => parseFloat((base - 0.5 + m*0.1 + sr(id*100+m, 77)*0.2).toFixed(2)));
-
+    const makeProgression = (base, id) => [0,1,2,3,4,5].map(m => parseFloat((base - 0.5 + m*0.1 + sr(id*100+m,77)*0.2).toFixed(2)));
     new Chart(document.getElementById('chart-line'), {
-        type: 'line',
-        data: {
-            labels: ['Enero','Febrero','Marzo','Abril','Mayo','Junio'],
-            datasets: [
-                { label:'Bogotá',      data: makeProgression(cityBaseAvg['Bogotá'],1),      borderColor:RED,    backgroundColor:RED_T,                        tension:0.4, borderWidth:2, fill:true,  pointRadius:4 },
-                { label:'Medellín',    data: makeProgression(cityBaseAvg['Medellín'],2),    borderColor:BLUE,   backgroundColor:'rgba(0,180,216,0.1)',         tension:0.4, borderWidth:2, fill:true,  pointRadius:4 },
-                { label:'Cali',        data: makeProgression(cityBaseAvg['Cali'],3),        borderColor:ORANGE, backgroundColor:'rgba(255,140,0,0.1)',         tension:0.4, borderWidth:2, fill:false, pointRadius:4 },
-                { label:'Barranquilla',data: makeProgression(cityBaseAvg['Barranquilla'],4),borderColor:PURPLE, backgroundColor:'rgba(179,136,255,0.1)',       tension:0.4, borderWidth:1.5,fill:false,pointRadius:3, borderDash:[4,4] }
-            ]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            scales: {
-                y: { min:3, max:7, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
-                x: { ticks:{font:{size:9}}, grid:{display:false} }
-            },
-            plugins: { legend: { labels:{font:{size:10},boxWidth:10} } }
-        }
+        type:'line',
+        data:{ labels:['Enero','Febrero','Marzo','Abril','Mayo','Junio'], datasets:[
+            {label:'Bogotá',data:makeProgression(cityBaseAvg['Bogotá'],1),borderColor:RED,backgroundColor:RED_T,tension:0.4,borderWidth:2,fill:true,pointRadius:4},
+            {label:'Medellín',data:makeProgression(cityBaseAvg['Medellín'],2),borderColor:BLUE,backgroundColor:'rgba(0,180,216,0.1)',tension:0.4,borderWidth:2,fill:true,pointRadius:4},
+            {label:'Cali',data:makeProgression(cityBaseAvg['Cali'],3),borderColor:ORANGE,backgroundColor:'rgba(255,140,0,0.1)',tension:0.4,borderWidth:2,fill:false,pointRadius:4},
+            {label:'Barranquilla',data:makeProgression(cityBaseAvg['Barranquilla'],4),borderColor:PURPLE,backgroundColor:'rgba(179,136,255,0.1)',tension:0.4,borderWidth:1.5,fill:false,pointRadius:3,borderDash:[4,4]}
+        ]},
+        options:{ responsive:true, maintainAspectRatio:false, scales:{ y:{min:3,max:7,ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}, x:{ticks:{font:{size:9}},grid:{display:false}} }, plugins:{legend:{labels:{font:{size:10},boxWidth:10}}} }
     });
 
-    // ── Bar Chart — Top 10 por consumo ───────────────────────────────
-    const sortedTop10 = [...audienceData].sort((a,b) => b.consumo - a.consumo).slice(0,10);
+    // Bar
+    const sortedTop10 = [...audienceData].sort((a,b)=>b.consumo-a.consumo).slice(0,10);
     new Chart(document.getElementById('chart-bar'), {
-        type: 'bar',
-        data: {
-            labels: sortedTop10.map(d => d.nombre.split(' ')[0] + ' ' + d.nombre.split(' ')[1]),
-            datasets: [{ label:'Consumo (min)', data: sortedTop10.map(d=>d.consumo), backgroundColor: sortedTop10.map((_,i)=>`rgba(229,9,20,${0.9-i*0.05})`), borderColor:RED, borderWidth:0, borderRadius:3 }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false, indexAxis:'y',
-            scales: {
-                x: { ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
-                y: { ticks:{font:{size:9}}, grid:{display:false} }
-            },
-            plugins: { legend:{display:false} }
-        }
+        type:'bar',
+        data:{ labels:sortedTop10.map(d=>d.nombre.split(' ')[0]+' '+d.nombre.split(' ')[1]), datasets:[{label:'Consumo (min)',data:sortedTop10.map(d=>d.consumo),backgroundColor:sortedTop10.map((_,i)=>`rgba(229,9,20,${0.9-i*0.05})`),borderColor:RED,borderWidth:0,borderRadius:3}]},
+        options:{ responsive:true, maintainAspectRatio:false, indexAxis:'y', scales:{ x:{ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{ticks:{font:{size:9}},grid:{display:false}} }, plugins:{legend:{display:false}} }
     });
 
-    // ── Scatter — muestra representativa 200 pts ─────────────────────
-    const scatterSample = audienceData.filter((_,i) => i % 10 === 0);
+    // Scatter
+    const scatterSample = audienceData.filter((_,i)=>i%10===0);
     new Chart(document.getElementById('chart-scatter'), {
-        type: 'scatter',
-        data: {
-            datasets: [{
-                label: 'Personas (muestra 200)',
-                data: scatterSample.map(d => ({ x:d.consumo, y:d.freq, r:d.satisf })),
-                backgroundColor: scatterSample.map(d =>
-                    d.index >= 8 ? 'rgba(0,212,122,0.6)' :
-                    d.index >= 5.5 ? 'rgba(255,140,0,0.6)' :
-                    'rgba(229,9,20,0.6)'),
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true, maintainAspectRatio: false,
-            scales: {
-                x: { title:{display:true, text:'Tiempo de Consumo (min)', font:{size:10}, color:'#888'}, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
-                y: { title:{display:true, text:'Frecuencia (x/sem)',      font:{size:10}, color:'#888'}, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} }
-            },
-            plugins: { legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` Consumo: ${ctx.raw.x}min · Freq: ${ctx.raw.y}x` } } }
-        }
+        type:'scatter',
+        data:{ datasets:[{label:'Personas (muestra 200)',data:scatterSample.map(d=>({x:d.consumo,y:d.freq,r:d.satisf})),backgroundColor:scatterSample.map(d=>d.index>=8?'rgba(0,212,122,0.6)':d.index>=5.5?'rgba(255,140,0,0.6)':'rgba(229,9,20,0.6)'),borderWidth:0}]},
+        options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{title:{display:true,text:'Tiempo de Consumo (min)',font:{size:10},color:'#888'},ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{title:{display:true,text:'Frecuencia (x/sem)',font:{size:10},color:'#888'},ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}} }, plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` Consumo: ${ctx.raw.x}min · Freq: ${ctx.raw.y}x`}}} }
     });
 
-    // ── Bubble Chart — Matriz Riesgo vs Eficiencia ───────────────────
+    // Bubble
     const channels = [
-        {name:'Meta',        risk:3.2, eff:8.4, spend:320, color:BLUE   },
-        {name:'TikTok',      risk:5.8, eff:9.1, spend:280, color:PURPLE },
-        {name:'YouTube',     risk:2.1, eff:7.8, spend:210, color:RED    },
-        {name:'Google Ads',  risk:2.8, eff:8.0, spend:190, color:GOLD   },
-        {name:'Programmatic',risk:6.4, eff:7.2, spend:150, color:ORANGE },
-        {name:'OOH Digital', risk:4.1, eff:6.5, spend:100, color:GREEN  },
-        {name:'Influencers', risk:7.2, eff:7.9, spend:130, color:'#ff69b4'}
+        {name:'Meta',risk:3.2,eff:8.4,spend:320,color:BLUE},{name:'TikTok',risk:5.8,eff:9.1,spend:280,color:PURPLE},
+        {name:'YouTube',risk:2.1,eff:7.8,spend:210,color:RED},{name:'Google Ads',risk:2.8,eff:8.0,spend:190,color:GOLD},
+        {name:'Programmatic',risk:6.4,eff:7.2,spend:150,color:ORANGE},{name:'OOH Digital',risk:4.1,eff:6.5,spend:100,color:GREEN},
+        {name:'Influencers',risk:7.2,eff:7.9,spend:130,color:'#ff69b4'}
     ];
     new Chart(document.getElementById('chart-bubble'), {
-        type: 'bubble',
-        data: { datasets: channels.map(c => ({ label:c.name, data:[{x:c.risk,y:c.eff,r:Math.sqrt(c.spend)*0.9}], backgroundColor:c.color+'33', borderColor:c.color, borderWidth:2 })) },
-        options: {
-            responsive:true, maintainAspectRatio:false,
-            scales: {
-                x: { title:{display:true,text:'Riesgo',font:{size:10},color:'#888'}, min:0, max:10, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
-                y: { title:{display:true,text:'Eficiencia ROI',font:{size:10},color:'#888'}, min:0, max:10, ticks:{font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} }
-            },
-            plugins: { legend:{ labels:{font:{size:10},boxWidth:10} } }
-        }
+        type:'bubble',
+        data:{ datasets:channels.map(c=>({label:c.name,data:[{x:c.risk,y:c.eff,r:Math.sqrt(c.spend)*0.9}],backgroundColor:c.color+'33',borderColor:c.color,borderWidth:2}))},
+        options:{ responsive:true, maintainAspectRatio:false, scales:{ x:{title:{display:true,text:'Riesgo',font:{size:10},color:'#888'},min:0,max:10,ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}, y:{title:{display:true,text:'Eficiencia ROI',font:{size:10},color:'#888'},min:0,max:10,ticks:{font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}} }, plugins:{legend:{labels:{font:{size:10},boxWidth:10}}} }
     });
 
-    // ── Channel table ────────────────────────────────────────────────
-    document.getElementById('channel-table').innerHTML = channels.map(c => `
+    document.getElementById('channel-table').innerHTML = channels.map(c=>`
   <div class="channel-row">
     <span class="channel-name" style="color:${c.color}">${c.name}</span>
     <div class="channel-bar-wrap"><div class="channel-bar" style="width:${c.eff*10}%;background:${c.color}"></div></div>
@@ -2037,35 +2374,25 @@
     <div style="text-align:right;font-size:12px;color:var(--red);font-weight:600">$${c.spend}M</div>
   </div>`).join('');
 
-    // ══════════════════════════════════════════════════════════════════
-    //  FUNNEL PROMEDIO GENERAL (con valores absolutos)
-    // ══════════════════════════════════════════════════════════════════
+    // ── Funnel Estrategia ─────────────────────────────────────────────
+    const TOTAL = audienceData.length;
+    const pctAwareness  = Math.round(60 + iF*28);
+    const pctConsid     = Math.round(pctAwareness  * (0.60+sF*0.20));
+    const pctTrial      = Math.round(pctConsid      * (0.55+iF*0.18));
+    const pctConversion = Math.round(pctTrial       * (0.50+iF*0.22));
+    const pctRetention  = Math.round(pctConversion  * (0.58+sF*0.22));
+    const pctAdvocacy   = Math.round(pctRetention   * (0.38+iF*0.28));
 
-    // Calcular tasas reales desde los datos generados
-    const avgIndex_f = audienceData.reduce((s,d)=>s+d.index,0) / audienceData.length;
-    const avgSatisf_f = audienceData.reduce((s,d)=>s+d.satisf,0) / audienceData.length;
-    const iF = avgIndex_f / 10;
-    const sF = avgSatisf_f / 10;
-
-    const pctAwareness   = Math.round(60 + iF * 28);
-    const pctConsid      = Math.round(pctAwareness  * (0.60 + sF * 0.20));
-    const pctTrial       = Math.round(pctConsid      * (0.55 + iF * 0.18));
-    const pctConversion  = Math.round(pctTrial       * (0.50 + iF * 0.22));
-    const pctRetention   = Math.round(pctConversion  * (0.58 + sF * 0.22));
-    const pctAdvocacy    = Math.round(pctRetention   * (0.38 + iF * 0.28));
-
-    const TOTAL = audienceData.length; // 2000
     const funnelSteps = [
-        { label:'Población Total', pct:100,          abs:TOTAL,                                         drop:null, color:'#888'  },
-        { label:'Awareness',       pct:pctAwareness,  abs:Math.round(TOTAL*pctAwareness/100),            drop:-(100-pctAwareness),           color:BLUE   },
-        { label:'Consideration',   pct:pctConsid,     abs:Math.round(TOTAL*pctConsid/100),               drop:-(pctAwareness-pctConsid),     color:PURPLE },
-        { label:'Trial / Free',    pct:pctTrial,      abs:Math.round(TOTAL*pctTrial/100),                drop:-(pctConsid-pctTrial),         color:GOLD   },
-        { label:'Conversion',      pct:pctConversion, abs:Math.round(TOTAL*pctConversion/100),           drop:-(pctTrial-pctConversion),     color:ORANGE },
-        { label:'Retención 30d',   pct:pctRetention,  abs:Math.round(TOTAL*pctRetention/100),            drop:-(pctConversion-pctRetention), color:RED    },
-        { label:'Advocacy',        pct:pctAdvocacy,   abs:Math.round(TOTAL*pctAdvocacy/100),             drop:-(pctRetention-pctAdvocacy),   color:GREEN  }
+        {label:'Población Total',pct:100,         abs:TOTAL,                                  drop:null, color:'#888'  },
+        {label:'Awareness',      pct:pctAwareness, abs:Math.round(TOTAL*pctAwareness/100),    drop:-(100-pctAwareness),           color:BLUE  },
+        {label:'Consideration',  pct:pctConsid,    abs:Math.round(TOTAL*pctConsid/100),        drop:-(pctAwareness-pctConsid),     color:PURPLE},
+        {label:'Trial / Free',   pct:pctTrial,     abs:Math.round(TOTAL*pctTrial/100),         drop:-(pctConsid-pctTrial),         color:GOLD  },
+        {label:'Conversion',     pct:pctConversion,abs:Math.round(TOTAL*pctConversion/100),    drop:-(pctTrial-pctConversion),     color:ORANGE},
+        {label:'Retención 30d',  pct:pctRetention, abs:Math.round(TOTAL*pctRetention/100),     drop:-(pctConversion-pctRetention), color:RED   },
+        {label:'Advocacy',       pct:pctAdvocacy,  abs:Math.round(TOTAL*pctAdvocacy/100),      drop:-(pctRetention-pctAdvocacy),   color:GREEN }
     ];
-
-    document.getElementById('funnel-container').innerHTML = funnelSteps.map(s => `
+    document.getElementById('funnel-container').innerHTML = funnelSteps.map(s=>`
   <div class="funnel-step" style="border-left-color:${s.color}">
     <div style="width:${Math.max(s.pct*2.2,70)}px;min-width:70px;max-width:220px;height:36px;border-radius:4px;background:${s.color}22;border:1px solid ${s.color}44;display:flex;align-items:center;justify-content:flex-end;padding:0 10px;">
       <span style="font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;color:${s.color}">${s.pct}%</span>
@@ -2074,43 +2401,35 @@
       <span class="funnel-label" style="color:${s.color};display:block">${s.label}</span>
       <span style="font-size:10px;color:var(--text-dim)">${s.abs.toLocaleString('es-CO')} personas</span>
     </div>
-    ${s.drop !== null
-        ? `<span class="funnel-drop">↓ ${Math.abs(s.drop)}% drop-off</span>`
-        : '<span class="funnel-drop" style="color:var(--text-dim)">Base</span>'}
+    ${s.drop!==null?`<span class="funnel-drop">↓ ${Math.abs(s.drop)}% drop-off</span>`:'<span class="funnel-drop" style="color:var(--text-dim)">Base</span>'}
   </div>`).join('');
 
-    // ══════════════════════════════════════════════════════════════════
-    //  FUNNEL INDIVIDUAL POR PERSONA
-    //  Cada persona tiene sus propias tasas calculadas desde su index/satisf
-    // ══════════════════════════════════════════════════════════════════
+    // ── Funnel table ─────────────────────────────────────────────────
     function calcFunnel(d) {
-        const iF = d.index  / 10;
-        const sF = d.satisf / 10;
-        // Ruido pequeño determinista para que personas similares no sean idénticas
-        const noise = n => Math.round(sr(d.id, n) * 4 - 2); // ±2 pp
-        const aw = Math.min(100, Math.round(58 + iF*30) + noise(30));
-        const co = Math.min(aw,  Math.round(aw  * (0.58 + sF*0.22)) + noise(31));
-        const tr = Math.min(co,  Math.round(co  * (0.53 + iF*0.20)) + noise(32));
-        const cv = Math.min(tr,  Math.round(tr  * (0.48 + iF*0.24)) + noise(33));
-        const re = Math.min(cv,  Math.round(cv  * (0.56 + sF*0.24)) + noise(34));
-        const ad = Math.min(re,  Math.round(re  * (0.36 + iF*0.30)) + noise(35));
-        return { aw, co, tr, cv, re, ad };
+        const iF=d.index/10, sF=d.satisf/10;
+        const noise=n=>Math.round(sr(d.id,n)*4-2);
+        const aw=Math.min(100,Math.round(58+iF*30)+noise(30));
+        const co=Math.min(aw, Math.round(aw*(0.58+sF*0.22))+noise(31));
+        const tr=Math.min(co, Math.round(co*(0.53+iF*0.20))+noise(32));
+        const cv=Math.min(tr, Math.round(tr*(0.48+iF*0.24))+noise(33));
+        const re=Math.min(cv, Math.round(cv*(0.56+sF*0.24))+noise(34));
+        const ad=Math.min(re, Math.round(re*(0.36+iF*0.30))+noise(35));
+        return {aw,co,tr,cv,re,ad};
     }
 
     let funnelFiltered = [...audienceData];
     let funnelPage = 0;
     const FUNNEL_PAGE = 100;
 
-    function renderFunnelTable(data, append = false) {
+    function renderFunnelTable(data, append=false) {
         const tbody = document.getElementById('funnel-table-body');
-        if (!append) { tbody.innerHTML = ''; funnelPage = 0; }
-
-        const slice = data.slice(funnelPage * FUNNEL_PAGE, (funnelPage + 1) * FUNNEL_PAGE);
-        slice.forEach(d => {
-            const f = calcFunnel(d);
-            const idxClass = d.index >= 6 ? 'badge-green' : d.index >= 5 ? 'badge-orange' : 'badge-red';
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
+        if(!append){tbody.innerHTML='';funnelPage=0;}
+        const slice = data.slice(funnelPage*FUNNEL_PAGE,(funnelPage+1)*FUNNEL_PAGE);
+        slice.forEach(d=>{
+            const f=calcFunnel(d);
+            const idxClass=d.index>=6?'badge-green':d.index>=5?'badge-orange':'badge-red';
+            const tr=document.createElement('tr');
+            tr.innerHTML=`
               <td><div style="font-weight:500;font-size:12px">${d.nombre}</div><div style="font-size:10px;color:var(--text-dim)">${d.ocupacion}</div></td>
               <td><span class="city-dot">${d.city}</span></td>
               <td style="color:var(--text-dim);font-size:11px">${d.edadExacta} · ${d.nse}</td>
@@ -2124,54 +2443,34 @@
               <td><span class="badge ${idxClass}">${d.index}</span></td>`;
             tbody.appendChild(tr);
         });
-
-        const existBtn = document.getElementById('funnel-load-more');
-        if (existBtn) existBtn.remove();
-        if ((funnelPage + 1) * FUNNEL_PAGE < data.length) {
-            const remaining = data.length - (funnelPage + 1) * FUNNEL_PAGE;
-            const tr = document.createElement('tr');
-            tr.id = 'funnel-load-more';
-            tr.innerHTML = `<td colspan="11" style="text-align:center;padding:12px"><button onclick="loadMoreFunnel()" style="background:rgba(229,9,20,0.1);border:1px solid rgba(229,9,20,0.3);color:var(--red);padding:8px 24px;border-radius:6px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;">CARGAR MÁS · ${remaining.toLocaleString('es-CO')} restantes</button></td>`;
+        const existBtn=document.getElementById('funnel-load-more');
+        if(existBtn)existBtn.remove();
+        if((funnelPage+1)*FUNNEL_PAGE<data.length){
+            const remaining=data.length-(funnelPage+1)*FUNNEL_PAGE;
+            const tr=document.createElement('tr');
+            tr.id='funnel-load-more';
+            tr.innerHTML=`<td colspan="11" style="text-align:center;padding:12px"><button onclick="loadMoreFunnel()" style="background:rgba(229,9,20,0.1);border:1px solid rgba(229,9,20,0.3);color:var(--red);padding:8px 24px;border-radius:6px;cursor:pointer;font-family:'Orbitron',sans-serif;font-size:10px;letter-spacing:2px;">CARGAR MÁS · ${remaining.toLocaleString('es-CO')} restantes</button></td>`;
             tbody.appendChild(tr);
         }
-        document.getElementById('funnel-row-count').textContent = `${data.length.toLocaleString('es-CO')} personas`;
+        document.getElementById('funnel-row-count').textContent=`${data.length.toLocaleString('es-CO')} personas`;
     }
-
-    function loadMoreFunnel() { funnelPage++; renderFunnelTable(funnelFiltered, true); }
-
+    function loadMoreFunnel(){funnelPage++;renderFunnelTable(funnelFiltered,true);}
     renderFunnelTable(funnelFiltered);
-
-    document.getElementById('search-funnel').addEventListener('input', function () {
-        const q = this.value.toLowerCase();
-        funnelFiltered = audienceData.filter(d =>
-            d.nombre.toLowerCase().includes(q) ||
-            d.city.toLowerCase().includes(q) ||
-            d.ocupacion.toLowerCase().includes(q) ||
-            d.nse.toLowerCase().includes(q)
-        );
+    document.getElementById('search-funnel').addEventListener('input',function(){
+        const q=this.value.toLowerCase();
+        funnelFiltered=audienceData.filter(d=>d.nombre.toLowerCase().includes(q)||d.city.toLowerCase().includes(q)||d.ocupacion.toLowerCase().includes(q)||d.nse.toLowerCase().includes(q));
         renderFunnelTable(funnelFiltered);
     });
 
-    // ── Churn Chart ──────────────────────────────────────────────────
-    const weeks = ['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11','S12'];
+    // ── Churn ────────────────────────────────────────────────────────
     new Chart(document.getElementById('chart-churn'), {
-        type: 'line',
-        data: {
-            labels: weeks,
-            datasets: [
-                { label:'Churn Real (%)',        data:[8.4,7.9,7.6,7.2,6.8,6.5,null,null,null,null,null,null], borderColor:RED,    backgroundColor:RED_T,   tension:0.4, borderWidth:2, fill:true, pointRadius:5, pointBackgroundColor:RED,   spanGaps:false },
-                { label:'Proyección (%)',         data:[null,null,null,null,null,6.5,6.1,5.7,5.2,4.8,4.3,3.9], borderColor:GREEN,  backgroundColor:GREEN_T, tension:0.4, borderWidth:2, fill:true, pointRadius:4, pointBackgroundColor:GREEN, spanGaps:false, borderDash:[6,4] },
-                { label:'Target Estratégico',     data:[7,7,7,7,7,7,5,5,5,4,4,4],                              borderColor:'rgba(255,215,0,0.4)', backgroundColor:'transparent', tension:0, borderWidth:1.5, borderDash:[3,3], pointRadius:0 }
-            ]
-        },
-        options: {
-            responsive:true, maintainAspectRatio:false,
-            scales: {
-                y: { min:0, max:10, ticks:{callback:v=>v+'%',font:{size:9}}, grid:{color:'rgba(255,255,255,0.04)'} },
-                x: { ticks:{font:{size:9}}, grid:{display:false} }
-            },
-            plugins: { legend:{ labels:{font:{size:10},boxWidth:10} } }
-        }
+        type:'line',
+        data:{ labels:['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11','S12'], datasets:[
+            {label:'Churn Real (%)',  data:[8.4,7.9,7.6,7.2,6.8,6.5,null,null,null,null,null,null],borderColor:RED,backgroundColor:RED_T,tension:0.4,borderWidth:2,fill:true,pointRadius:5,pointBackgroundColor:RED,spanGaps:false},
+            {label:'Proyección (%)', data:[null,null,null,null,null,6.5,6.1,5.7,5.2,4.8,4.3,3.9],borderColor:GREEN,backgroundColor:GREEN_T,tension:0.4,borderWidth:2,fill:true,borderDash:[6,4],pointRadius:4,pointBackgroundColor:GREEN,spanGaps:false},
+            {label:'Target',         data:[7,7,7,7,7,7,5,5,5,4,4,4],borderColor:'rgba(255,215,0,0.4)',backgroundColor:'transparent',tension:0,borderWidth:1.5,borderDash:[3,3],pointRadius:0}
+        ]},
+        options:{ responsive:true, maintainAspectRatio:false, scales:{ y:{min:0,max:10,ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}}, x:{ticks:{font:{size:9}},grid:{display:false}} }, plugins:{legend:{labels:{font:{size:10},boxWidth:10}}} }
     });
 
     // ══════════════════════════════════
@@ -2192,71 +2491,56 @@
     // ══════════════════════════════════
     function updateClock() {
         document.getElementById('clock').textContent =
-            new Date().toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+            new Date().toLocaleTimeString('es-CO', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
     }
     setInterval(updateClock, 1000);
     updateClock();
 
     // ══════════════════════════════════
-    //  INIT — Resumen
+    //  RESUMEN — Géneros y Target Profile
     // ══════════════════════════════════
     calcKPIs();
 
-    // Géneros top 3 (calculados desde gustos reales de la librería)
     const genreCount = {};
     audienceData.forEach(d => {
         d.gustos.split(',').forEach(g => {
             const key = g.trim().split(' ')[0];
-            genreCount[key] = (genreCount[key] || 0) + 1;
+            genreCount[key] = (genreCount[key]||0)+1;
         });
     });
     const topGenres = Object.entries(genreCount).sort((a,b)=>b[1]-a[1]).slice(0,3);
-    const maxG = topGenres[0][1];
     document.getElementById('top-genres').innerHTML = topGenres.map(([name, cnt], i) => {
-        const pct = Math.round(cnt / audienceData.length * 100);
+        const pct = Math.round(cnt/audienceData.length*100);
         return `
   <div style="margin-bottom:12px">
     <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
       <span>${i+1}. ${name}</span>
       <span style="font-family:'Orbitron',sans-serif">${pct}%</span>
     </div>
-    <div class="progress-bar-track">
-      <div class="progress-bar-fill" style="width:${pct}%;background:var(--red)"></div>
-    </div>
+    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%;background:var(--red)"></div></div>
   </div>`;
     }).join('');
 
-    // Target Audience Profile — calculado desde la librería real
     function renderTargetAudience() {
         const n = audienceData.length;
         const avgC = (audienceData.reduce((s,d)=>s+d.consumo,0)/n).toFixed(0);
-        const avgI = (audienceData.reduce((s,d)=>s+d.index,0)/n).toFixed(2);
-        const avgF = (audienceData.reduce((s,d)=>s+d.freq,0)/n).toFixed(1);
+        const avgI = (audienceData.reduce((s,d)=>s+d.index,  0)/n).toFixed(2);
+        const avgF = (audienceData.reduce((s,d)=>s+d.freq,   0)/n).toFixed(1);
         const avgA = (audienceData.reduce((s,d)=>s+d.edadExacta,0)/n).toFixed(0);
-
         const cityCount = {};
-        audienceData.forEach(d => { cityCount[d.city] = (cityCount[d.city]||0)+1; });
-        const topCities = Object.entries(cityCount).sort((a,b)=>b[1]-a[1]).slice(0,5)
-            .map(([city,cnt]) => `${city} (${(cnt/n*100).toFixed(0)}%)`).join(' · ');
-
+        audienceData.forEach(d=>{cityCount[d.city]=(cityCount[d.city]||0)+1;});
+        const topCities = Object.entries(cityCount).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([city,cnt])=>`${city} (${(cnt/n*100).toFixed(0)}%)`).join(' · ');
         const devCount = {};
-        audienceData.forEach(d => {
-            d.device.split('/').forEach(dv => { const k=dv.trim(); devCount[k]=(devCount[k]||0)+1; });
-        });
+        audienceData.forEach(d=>{d.device.split('/').forEach(dv=>{const k=dv.trim();devCount[k]=(devCount[k]||0)+1;});});
         const topDevices = Object.entries(devCount).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([d])=>d).join(', ');
-
         const nseCount = {};
-        audienceData.forEach(d => { nseCount[d.nse]=(nseCount[d.nse]||0)+1; });
+        audienceData.forEach(d=>{nseCount[d.nse]=(nseCount[d.nse]||0)+1;});
         const dominantNSE = Object.entries(nseCount).sort((a,b)=>b[1]-a[1])[0][0];
-
-        document.getElementById('target-perfil').textContent =
-            `${n.toLocaleString('es-CO')} perfiles únicos · Edad promedio ${avgA} años · NSE dominante: ${dominantNSE} · Urbanos Colombia`;
-        document.getElementById('target-contenido').textContent =
-            `Contenido local colombiano y drama son los géneros más demandados. El top de consumo llega a 180 min/sesión. Promedio de engagement index: ${avgI}/10. Consumo promedio: ${avgC} min/sesión.`;
-        document.getElementById('target-metodo').textContent =
-            `Consumo fragmentado y multitarea. Dispositivos más usados: ${topDevices}. Frecuencia promedio: ${avgF}x/sem. Alto uso offline en segmentos en tránsito.`;
-        document.getElementById('target-horario').textContent = '21:00–01:00 L–V · Fines de semana 14:00–23:00';
-        document.getElementById('target-zona').textContent = topCities;
+        document.getElementById('target-perfil').textContent   = `${n.toLocaleString('es-CO')} perfiles únicos · Edad promedio ${avgA} años · NSE dominante: ${dominantNSE} · Urbanos Colombia`;
+        document.getElementById('target-contenido').textContent = `Contenido local colombiano y drama son los géneros más demandados. Engagement index promedio: ${avgI}/10. Consumo promedio: ${avgC} min/sesión.`;
+        document.getElementById('target-metodo').textContent   = `Consumo fragmentado y multitarea. Dispositivos más usados: ${topDevices}. Frecuencia promedio: ${avgF}x/sem.`;
+        document.getElementById('target-horario').textContent  = '21:00–01:00 L–V · Fines de semana 14:00–23:00';
+        document.getElementById('target-zona').textContent     = topCities;
     }
     renderTargetAudience();
 
