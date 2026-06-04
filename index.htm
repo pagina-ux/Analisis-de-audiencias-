@@ -1783,10 +1783,13 @@
     // Renderizar matriz
     let openDetailRow = null;
 
+    const MATRIX_TOTAL = 2000;
     function pctCell(val, color) {
-        return `<div class="cc-pct-cell">
+        const abs = Math.round(MATRIX_TOTAL * val / 100).toLocaleString('es-CO');
+        return `<div class="cc-pct-cell" style="position:relative;" onmouseenter="this.querySelector('.cc-pct-tooltip').style.opacity='1';this.querySelector('.cc-pct-tooltip').style.visibility='visible';" onmouseleave="this.querySelector('.cc-pct-tooltip').style.opacity='0';this.querySelector('.cc-pct-tooltip').style.visibility='hidden';">
             <span class="cc-pct-val" style="color:${color}">${val}%</span>
             <div class="cc-pct-bar"><div class="cc-pct-fill" style="width:${val}%;background:${color}"></div></div>
+            <div class="cc-pct-tooltip" style="opacity:0;visibility:hidden;transition:opacity 0.15s;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid ${color}66;border-radius:6px;padding:5px 9px;white-space:nowrap;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;color:${color};z-index:50;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,0.5);">${abs} personas</div>
         </div>`;
     }
 
